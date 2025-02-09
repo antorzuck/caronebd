@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Navigation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar placeholder (for testing) -->
+    <nav class="bg-primary text-white p-4">
+        <h1 class="text-2xl font-bold">Car One BD</h1>
+    </nav>
+
+    <!-- Category Navigation -->
+    <div class="bg-white border-b shadow-sm relative">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center whitespace-nowrap">
+                <!-- Interior -->
+                <div x-data="{ open: false }" class="relative" @mouseleave="open = false">
+                    <button @mouseover="open = true" x-dropdown
+                            class="flex items-center gap-1 px-4 py-3 hover:text-primary transition duration-150">
+                        Interior
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform scale-y-90"
+                         x-transition:enter-end="opacity-100 transform scale-y-100"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 transform scale-y-100"
+                         x-transition:leave-end="opacity-0 transform scale-y-90"
+                         class="fixed bg-white border rounded-lg shadow-lg w-48 py-2 z-[9999]"
+                         style="top: 100%; left: var(--dropdown-left);"
+                         x-cloak>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Seat Covers</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Floor Mats</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Steering Covers</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Dashboard Covers</a>
+                    </div>
+                </div>
+
+                <!-- Exterior -->
+                <div x-data="{ open: false }" class="relative" @mouseleave="open = false">
+                    <button @mouseover="open = true" x-dropdown
+                            class="flex items-center gap-1 px-4 py-3 hover:text-primary transition duration-150">
+                        Exterior
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform scale-y-90"
+                         x-transition:enter-end="opacity-100 transform scale-y-100"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 transform scale-y-100"
+                         x-transition:leave-end="opacity-0 transform scale-y-90"
+                         class="fixed bg-white border rounded-lg shadow-lg w-48 py-2 z-[9999]"
+                         style="top: 100%; left: var(--dropdown-left);"
+                         x-cloak>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Car Covers</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Wiper Blades</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Body Kits</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Car Lights</a>
+                    </div>
+                </div>
+
+                <!-- Electronics -->
+                <div x-data="{ open: false }" class="relative" @mouseleave="open = false">
+                    <button @mouseover="open = true" x-dropdown
+                            class="flex items-center gap-1 px-4 py-3 hover:text-primary transition duration-150">
+                        Electronics
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform scale-y-90"
+                         x-transition:enter-end="opacity-100 transform scale-y-100"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 transform scale-y-100"
+                         x-transition:leave-end="opacity-0 transform scale-y-90"
+                         class="fixed bg-white border rounded-lg shadow-lg w-48 py-2 z-[9999]"
+                         style="top: 100%; left: var(--dropdown-left);"
+                         x-cloak>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Car Audio</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">GPS Systems</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Dash Cams</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Security Systems</a>
+                    </div>
+                </div>
+
+                <!-- Car Care -->
+                <div x-data="{ open: false }" class="relative" @mouseleave="open = false">
+                    <button @mouseover="open = true" x-dropdown
+                            class="flex items-center gap-1 px-4 py-3 hover:text-primary transition duration-150">
+                        Car Care
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform scale-y-90"
+                         x-transition:enter-end="opacity-100 transform scale-y-100"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 transform scale-y-100"
+                         x-transition:leave-end="opacity-0 transform scale-y-90"
+                         class="fixed bg-white border rounded-lg shadow-lg w-48 py-2 z-[9999]"
+                         style="top: 100%; left: var(--dropdown-left);"
+                         x-cloak>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Car Wash</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Polishes & Waxes</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Interior Cleaners</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Air Fresheners</a>
+                    </div>
+                </div>
+
+                <!-- Performance -->
+                <div x-data="{ open: false }" class="relative" @mouseleave="open = false">
+                    <button @mouseover="open = true" x-dropdown
+                            class="flex items-center gap-1 px-4 py-3 hover:text-primary transition duration-150">
+                        Performance
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform scale-y-90"
+                         x-transition:enter-end="opacity-100 transform scale-y-100"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 transform scale-y-100"
+                         x-transition:leave-end="opacity-0 transform scale-y-90"
+                         class="fixed bg-white border rounded-lg shadow-lg w-48 py-2 z-[9999]"
+                         style="top: 100%; left: var(--dropdown-left);"
+                         x-cloak>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Air Filters</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Oil & Fluids</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Spark Plugs</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Brake Parts</a>
+                    </div>
+                </div>
+
+                <!-- Accessories -->
+                <div x-data="{ open: false }" class="relative" @mouseleave="open = false">
+                    <button @mouseover="open = true" x-dropdown
+                            class="flex items-center gap-1 px-4 py-3 hover:text-primary transition duration-150">
+                        Accessories
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform scale-y-90"
+                         x-transition:enter-end="opacity-100 transform scale-y-100"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 transform scale-y-100"
+                         x-transition:leave-end="opacity-0 transform scale-y-90"
+                         class="fixed bg-white border rounded-lg shadow-lg w-48 py-2 z-[9999]"
+                         style="top: 100%; left: var(--dropdown-left);"
+                         x-cloak>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Phone Holders</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Car Organizers</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Sun Shades</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">Key Chains</a>
+                    </div>
+                </div>
+
+                <!-- Brands -->
+                <a href="#" class="px-4 py-3 hover:text-primary transition duration-150">Brands</a>
+
+                <!-- Offers -->
+                <a href="#" class="px-4 py-3 hover:text-primary transition duration-150">Offers</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content placeholder (for testing) -->
+    <main class="container mx-auto mt-8 p-4">
+        <h2 class="text-2xl font-bold mb-4">Welcome to Car One BD</h2>
+        <p>This is a placeholder for the main content. The category navigation should appear above this text.</p>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    
+        // Position dropdowns correctly
+        document.addEventListener('alpine:init', () => {
+            Alpine.directive('dropdown', (el) => {
+                el.addEventListener('mouseover', (e) => {
+                    const button = e.currentTarget;
+                    const dropdown = button.nextElementSibling;
+                    const rect = button.getBoundingClientRect();
+                    dropdown.style.setProperty('--dropdown-left', rect.left + 'px');
+                    dropdown.style.top = (rect.bottom + 1) + 'px';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car One BD - Car Accessories Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF5722',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        html {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    
+        
+        [x-cloak] { display: none !important; }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        
+                .flash-sale-gradient {
+                  background: linear-gradient(90deg, #FF8C00 0%, #FF6B6B 100%);
+                }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-primary sticky top-0 z-50">
+        <div class="px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="flex items-center">
+                    {% if site_info.logo %}
+                    <img src="{{ site_info.logo.url }}" alt="Car One BD" class="h-8">
+                    {% endif %}
+                </a>
+                <div class="flex items-center space-x-4">
+                    <button class="text-white">
+                        <i data-lucide="heart" class="w-6 h-6"></i>
+                    </button>
+                    <button class="text-white">
+                        <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    </button>
+                    <button class="text-white">
+                        <i data-lucide="user" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Categories Scroll -->
+    <div class="flex overflow-x-auto whitespace-nowrap py-3 px-4 gap-5 bg-white text-gray-600 hidden">
+        <span class="text-sm font-medium">Interior</span>
+        <span class="text-sm font-medium">Exterior</span>
+        <span class="text-sm font-medium">Electronics & Gadgets</span>
+        <span class="text-sm font-medium">Care</span>
+        <span class="text-sm font-medium">Performance</span>
+        <span class="text-sm font-medium">Perfumes</span>
+        <span class="text-sm font-medium">Stickers</span>
+    </div>
+
+
+
+   
+    <!-- Category Navigation -->
+    <div class="bg-white border-b shadow-sm relative">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center whitespace-nowrap">
+               
+
+                <!-- Accessories -->
+
+                {% for category in categories %}
+                <div x-data="{ open: false }" class="relative" @mouseleave="open = false">
+                    <button @mouseover="open = true" x-dropdown
+                            class="flex items-center gap-1 px-4 py-3 hover:text-primary transition duration-150">
+                        {{category.name}}
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform scale-y-90"
+                         x-transition:enter-end="opacity-100 transform scale-y-100"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 transform scale-y-100"
+                         x-transition:leave-end="opacity-0 transform scale-y-90"
+                         class="fixed bg-white border rounded-lg shadow-lg w-48 py-2 z-[9999]"
+                         style="top: 100%; left: var(--dropdown-left);"
+                         x-cloak>
+                         {% for subcategory in category.child.all %}
+                        <a href="{{ subcategory.slug }}" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">{{ subcategory.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% endfor %}
+
+                <!-- Brands -->
+                <a href="#" class="px-4 py-3 hover:text-primary transition duration-150">Brands</a>
+
+                <!-- Offers -->
+                <a href="#" class="px-4 py-3 hover:text-primary transition duration-150">Offers</a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <main class="">
+
+        <div class="pb-20 mt-8 mx-3 md:mx-10">
+
+{% block body %}
+
+{% endblock %}
+
+
+</div>
+
+
+
+    <footer class="bg-white pt-10 pb-4">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="space-y-4">
+
+                    {% if site_info.logo %}
+                    <img src="{{ site_info.logo.url }}" alt="OrenMart" class="h-8">
+                    {% endif %}
+                    <p class="text-gray-600 text-sm">
+                        {{ site_info.description }}
+                    </p>
+                    <!-- Download App Section -->
+                    <div class="space-y-2">
+                        <h3 class="font-bold text-sm">DOWNLOAD APP</h3>
+                        <div class="flex gap-2">
+                            <a href="#" class="block">
+                                <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" 
+                                     alt="Get it on Google Play" 
+                                     class="h-10">
+                            </a>
+                            <a href="#" class="block">
+                                <img src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg" 
+                                     alt="Download on the App Store" 
+                                     class="h-10">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Section -->
+                <div>
+                    <h3 class="font-bold mb-4">CUSTOMER</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Account</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Cart</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Wishlist</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Delivery Info</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Ceramic Coating Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Information Section -->
+                <div>
+                    <h3 class="font-bold mb-4">INFORMATION</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-primary">About us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Returns & Refund</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Section -->
+                <div>
+                    <h3 class="font-bold mb-4">CONTACT</h3>
+                    <div class="space-y-2 text-gray-600">
+                        <p>220/D/04 Begum Rokeya Sarani Metro Pillar 328, Shewrapra, Dhaka-1207, Bangladesh</p>
+                        <p>E-mail: orenmartbd@gmail.com</p>
+                        <p>Phone: 09613821382, 01999906676</p>
+                        <!-- Social Media Icons -->
+                        <div class="flex gap-4 mt-4">
+                            <a href="#" class="text-blue-600 hover:text-blue-700">
+                                <i data-lucide="facebook" class="w-6 h-6"></i>
+                            </a>
+                            <a href="#" class="text-red-600 hover:text-red-700">
+                                <i data-lucide="youtube" class="w-6 h-6"></i>
+                            </a>
+                            <a href="#" class="text-pink-600 hover:text-pink-700">
+                                <i data-lucide="instagram" class="w-6 h-6"></i>
+                            </a>
+                            <a href="#" class="text-black hover:text-gray-800">
+                                <i data-lucide="music" class="w-6 h-6"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-8 pt-4 border-t text-center text-sm text-gray-600">
+                <p>© 2025 OneCarBD - All Rights Reserved | Developed by <a href="#" class="font-semibold hover:text-primary">Antor Mahmud</a></p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t py-2 z-50 md:hidden">
+        <div class="grid grid-cols-5 gap-1">
+            <a href="#" class="flex flex-col items-center text-primary">
+                <i data-lucide="home" class="w-6 h-6"></i>
+                <span class="text-xs mt-1">Home</span>
+            </a>
+            <button x-data @click="$dispatch('open-category-modal')" class="flex flex-col items-center text-gray-600">
+                <i data-lucide="grid" class="w-6 h-6"></i>
+                <span class="text-xs mt-1">Category</span>
+            </button>
+            <a href="#" class="flex flex-col items-center text-gray-600">
+                <i data-lucide="tag" class="w-6 h-6"></i>
+                <span class="text-xs mt-1">Offer</span>
+            </a>
+            <a href="#" class="flex flex-col items-center text-gray-600">
+                <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                <span class="text-xs mt-1">Cart</span>
+            </a>
+            <a href="#" class="flex flex-col items-center text-gray-600">
+                <i data-lucide="user" class="w-6 h-6"></i>
+                <span class="text-xs mt-1">Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Category Modal -->
+    <div x-data="{ open: false }" 
+         @open-category-modal.window="open = true"
+         x-show="open" 
+         class="fixed inset-0 z-[60]"
+         x-cloak>
+        
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black bg-opacity-50" 
+             @click="open = false"></div>
+        
+        <!-- Modal -->
+        <div class="fixed bottom-0 inset-x-0 bg-white rounded-t-xl max-h-[50vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b sticky top-0 bg-white">
+                <h3 class="text-lg font-semibold">Menu</h3>
+                <button @click="open = false">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div class="overflow-y-auto">
+                <div class="p-4 space-y-4">
+                    <div x-data="{ open: false }">
+                        <button @click="open = !open" class="flex items-center justify-between w-full p-2">
+                            <div class="flex items-center gap-3">
+                                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                                     class="w-10 h-10 rounded-full" alt="Interior">
+                                <span>Interior</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5" :class="{ 'transform rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" class="pl-12 py-2 space-y-2">
+                            <a href="#" class="block py-2">Seat Covers</a>
+                            <a href="#" class="block py-2">Floor Mats</a>
+                            <a href="#" class="block py-2">Steering Covers</a>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                      <div x-data="{ open: false }">
+                        <button @click="open = !open" class="flex items-center justify-between w-full p-2">
+                            <div class="flex items-center gap-3">
+                                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                                     class="w-10 h-10 rounded-full" alt="Interior">
+                                <span>Interior</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5" :class="{ 'transform rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" class="pl-12 py-2 space-y-2">
+                            <a href="#" class="block py-2">Seat Covers</a>
+                            <a href="#" class="block py-2">Floor Mats</a>
+                            <a href="#" class="block py-2">Steering Covers</a>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+
+                    <div x-data="{ open: false }">
+                        <button @click="open = !open" class="flex items-center justify-between w-full p-2">
+                            <div class="flex items-center gap-3">
+                                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                                     class="w-10 h-10 rounded-full" alt="Exterior">
+                                <span>Exterior</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5" :class="{ 'transform rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" class="pl-12 py-2 space-y-2">
+                            <a href="#" class="block py-2">Car Covers</a>
+                            <a href="#" class="block py-2">Wiper Blades</a>
+                            <a href="#" class="block py-2">Body Kits</a>
+                        </div>
+                    </div>
+
+                    <div x-data="{ open: false }">
+                        <button @click="open = !open" class="flex items-center justify-between w-full p-2">
+                            <div class="flex items-center gap-3">
+                                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                                     class="w-10 h-10 rounded-full" alt="Electronics">
+                                <span>Electronics</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-5 h-5" :class="{ 'transform rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" class="pl-12 py-2 space-y-2">
+                            <a href="#" class="block py-2">Car Audio</a>
+                            <a href="#" class="block py-2">GPS Systems</a>
+                            <a href="#" class="block py-2">Dash Cams</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    
+    
+        function productSlider() {
+            return {
+                canScrollLeft: false,
+                canScrollRight: true,
+
+                init() {
+                    this.checkScroll();
+                    this.$refs.container.addEventListener('scroll', () => this.checkScroll());
+                },
+
+                scrollLeft() {
+                    this.$refs.container.scrollBy({
+                        left: -200,
+                        behavior: 'smooth'
+                    });
+                },
+
+                scrollRight() {
+                    this.$refs.container.scrollBy({
+                        left: 200,
+                        behavior: 'smooth'
+                    });
+                },
+
+                checkScroll() {
+                    const container = this.$refs.container;
+                    this.canScrollLeft = container.scrollLeft > 0;
+                    this.canScrollRight = container.scrollLeft < (container.scrollWidth - container.clientWidth);
+                }
+            };
+        }    
+
+
+
+  // Position dropdowns correctly
+  document.addEventListener('alpine:init', () => {
+            Alpine.directive('dropdown', (el) => {
+                el.addEventListener('mouseover', (e) => {
+                    const button = e.currentTarget;
+                    const dropdown = button.nextElementSibling;
+                    const rect = button.getBoundingClientRect();
+                    dropdown.style.setProperty('--dropdown-left', rect.left + 'px');
+                    dropdown.style.top = (rect.bottom + 1) + 'px';
+                });
+            });
+        });
+
+
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
+

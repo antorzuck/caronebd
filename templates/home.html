@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+
+
+    <section class="flex gap-5 justify-center">
+    <!-- Hero Carousel -->
+    <div x-data="{ activeSlide: 0 }" class="relative mb-4 order-2">
+        <div class="relative w-full overflow-hidden">
+            <div class="flex transition-transform duration-300 ease-in-out" :style="{ transform: `translateX(-${activeSlide * 100}%)` }">
+               
+                {% for banner in banners %}
+               
+                <div class="w-full flex-none">
+                    {% if banner.image %}
+                    
+                    <img src="{{banner.image.url}}" class="rounded-xl w-full h-auto lg:h-96" alt="{{banner.alt_text}}">
+                {% endif %}
+                </div>
+
+                {% endfor %}
+               
+            </div>
+        </div>
+        <button @click="activeSlide = (activeSlide - 1 + 2) % 2" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray p-2 rounded-full shadow-lg">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+        <button @click="activeSlide = (activeSlide + 1) % 2" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray p-2 rounded-full shadow-lg">
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+        </button>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="hidden lg:h-96 overflow-y-scroll lg:block px-4 mb-6 order-1 bg-white rounded-xl p-2 text-gray-600 w-96 py-3">
+
+
+        {% for category in categories %}
+        <div  x-data="{ open: false }" class="bg-white rounded-xl mt-1">
+            <button @click="open = !open" class="w-full">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        {% if category.thumbnail %}
+                        <img src="{{category.thumbnail.url}}" 
+                             class="w-8 h-8 rounded-full" alt="{{category.name}}">
+                        {% endif %}
+                        <span class="font-medium">{{category.name}}</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-5 h-5" :class="{ 'transform rotate-180': open }"></i>
+                </div>
+            </button>
+
+            <div x-show="open" class="mt-3 pl-13">
+                {% for subcategory in category.child.all %}
+                <a href="{{ subcategory.slug }}" class="block ml-5 text-gray-600">{{ subcategory.name }}</a>
+                {% endfor %}
+        
+            </div>
+        </div>
+
+        {% endfor %}
+
+
+
+
+
+    </div>
+</section>
+
+
+
+
+<!-- Flash Sale Section -->
+<div class="flash-sale-gradient p-4 md:p-6 rounded-xl">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold text-white">FLASH SALE</h2>
+        <a href="#" class="bg-white text-black px-4 py-1 rounded text-sm">View all</a>
+    </div>
+
+    <div x-data="productSlider()" class="relative">
+        <!-- Previous Button -->
+        <button @click="scrollLeft" 
+                class="absolute -left-2 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md"
+                x-show="canScrollLeft"
+                x-cloak>
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Product Container -->
+        <div class="overflow-x-auto hide-scrollbar" x-ref="container">
+            <div class="flex gap-4">
+            
+               
+            {% for f in flashs%}
+                <div class="flex-none w-36 md:w-64">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                        <img src="{{f.product.featured_image.url}}" alt="{{f.product.name}}" class="w-full h-36 md:h-52 object-cover">
+                        <div class="p-3">
+                            <h3 class="text-sm font-medium line-clamp-2 mb-1">{{f.product.name}}</h3>
+                            <p class="text-primary font-bold">৳{{f.product.price}}</p>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+            </div>
+        </div>
+
+        <!-- Next Button -->
+        <button @click="scrollRight" 
+                class="absolute -right-2 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md"
+                x-show="canScrollRight"
+                x-cloak>
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+        </button>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    <!-- Top Categories -->
+    <div class="lg:hidden px-4 mt-8 mb-6">
+        <h2 class="text-gray-800 text-md font-bold mb-4">TOP CATEGORIES</h2>
+        <div class="flex overflow-x-auto gap-4 pb-4">
+            <div class="flex-none text-center w-20">
+                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                     class="w-20 h-20 rounded-full mb-2" alt="Interior">
+                <p class="text-sm font-medium">Interior</p>
+            </div>
+            <div class="flex-none text-center w-20">
+                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                     class="w-20 h-20 rounded-full mb-2" alt="Exterior">
+                <p class="text-sm font-medium">Exterior</p>
+            </div>
+            <div class="flex-none text-center w-20">
+                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                     class="w-20 h-20 rounded-full mb-2" alt="Electrical">
+                <p class="text-sm font-medium">Electrical</p>
+            </div>
+            <div class="flex-none text-center w-20">
+                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                     class="w-20 h-20 rounded-full mb-2" alt="Engine">
+                <p class="text-sm font-medium">Engine</p>
+            </div>
+            <div class="flex-none text-center w-20">
+                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                     class="w-20 h-20 rounded-full mb-2" alt="Wheels">
+                <p class="text-sm font-medium">Wheels</p>
+            </div>
+            <div class="flex-none text-center w-20">
+                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                     class="w-20 h-20 rounded-full mb-2" alt="Accessories">
+                <p class="text-sm font-medium">Accessories</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flash Sale -->
+
+
+<!-- Product Slider Section -->
+<div class="px-4 py-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold">TRENDING PRODUCTS</h2>
+        <a href="#" class="text-white bg-primary px-4 py-1 rounded text-sm">View all</a>
+    </div>
+
+    <div x-data="productSlider()" class="relative">
+        <!-- Previous Button -->
+        <button @click="scrollLeft" 
+                class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md"
+                x-show="canScrollLeft"
+                x-cloak>
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Product Container -->
+        <div class="overflow-x-auto hide-scrollbar" x-ref="container">
+            <div class="flex gap-4">
+            {% for product in products %}
+            <a href="/{product.slug}">
+                <div class="flex-none w-36 md:w-64">
+                    <div class="bg-white rounded-lg overflow-hidden">
+                        <img src="{{product.featured_image.url}}" alt="Denso Cool Gear Cabin Filter" class="w-full h-36 md:h-52 object-cover">
+                        <div class="p-2">
+                            <h3 class="text-sm font-medium line-clamp-2 mb-1">{{product.name}}</h3>
+                            <p class="text-primary font-bold">৳{{product.price}}</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Next Button -->
+        <button @click="scrollRight" 
+                class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md"
+                x-show="canScrollRight"
+                x-cloak>
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+        </button>
+    </div>
+</div>
+
+
+
+{% endblock %}
