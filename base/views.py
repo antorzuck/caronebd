@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from base.models import *
 
 
@@ -17,3 +17,15 @@ def home(r):
         'flashs' : flash
     }
     return render(r, 'home.html', context)
+
+
+def product_view(r, slug):
+    try:
+        get_product = Product.objects.get(slug=slug)
+
+        context = {
+            'product' : get_product
+        }
+    except:
+        return redirect('/')
+    return render(r, 'product-view.html', context)

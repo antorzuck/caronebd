@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-
+from django_ckeditor_5.fields import CKEditor5Field
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -51,7 +51,7 @@ class SubCategory(BaseModel):
 class Product(BaseModel):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True, blank=True)
-    description = models.TextField()
+    description = CKEditor5Field()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     stock = models.PositiveIntegerField(default=0)

@@ -1,70 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product View - Car One BD</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        [x-cloak] { display: none !important; }
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .zoom-hover:hover img {
-            transform: scale(1.5);
-        }
-    </style>
-</head>
-<body class="bg-gray-50">
-    <main class="container mx-auto px-4 py-8">
-        <!-- Breadcrumb -->
-        <nav class="flex items-center gap-2 text-sm mb-6">
-            <a href="#" class="text-gray-500 hover:text-primary">Home</a>
-            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-            <a href="#" class="text-gray-500 hover:text-primary">Car Care</a>
-            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-            <span class="text-gray-900">Car Air Freshener Premium Edition</span>
-        </nav>
+{% extends 'base.html' %}
+    {% load static %}
 
-        <!-- Product Details Section -->
+{% block css %}
+
+{% endblock %}
+    
+    {% block body %}
+    <!-- Product Details Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <!-- Product Images -->
             <div x-data="{ activeImage: 0 }" class="space-y-4">
                 <!-- Main Image -->
                 <div class="bg-white rounded-lg p-4 overflow-hidden zoom-hover">
                     <div class="relative aspect-square">
-                        <img :src="'/placeholder.svg?height=600&width=600'" 
+                        <img :src="'{{product.featured_image.url}}'" 
                              alt="Product Image" 
                              class="w-full h-full object-contain transition-transform duration-300">
                     </div>
                 </div>
                 <!-- Thumbnail Images -->
                 <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
+                    {% for i in product.thumbnails.all %}
                     <button class="flex-none w-20 h-20 rounded-lg bg-white p-2 border-2 border-primary">
-                        <img src="/placeholder.svg?height=80&width=80" alt="Thumbnail 1" class="w-full h-full object-contain">
+                        <img src="{{i.image.url}}" alt="Thumbnail 1" class="w-full h-full object-contain">
                     </button>
-                    <button class="flex-none w-20 h-20 rounded-lg bg-white p-2 border-2 border-transparent hover:border-primary">
-                        <img src="/placeholder.svg?height=80&width=80" alt="Thumbnail 2" class="w-full h-full object-contain">
-                    </button>
-                    <button class="flex-none w-20 h-20 rounded-lg bg-white p-2 border-2 border-transparent hover:border-primary">
-                        <img src="/placeholder.svg?height=80&width=80" alt="Thumbnail 3" class="w-full h-full object-contain">
-                    </button>
+                    {% endfor %}
+                   
                 </div>
             </div>
 
             <!-- Product Info -->
             <div class="space-y-6">
                 <div>
-                    <h1 class="text-2xl font-bold mb-2">Car Air Freshener Premium Edition</h1>
+                    <h1 class="text-2xl font-bold mb-2">{{product.name}}</h1>
                     <div class="flex items-center gap-4 mb-4">
-                        <span class="text-3xl font-bold text-primary">৳399</span>
-                        <span class="text-lg text-gray-500 line-through">৳499</span>
+                        <span class="text-3xl font-bold text-primary">৳{{product.discount_price}}</span>
+                        <span class="text-lg text-gray-500 line-through">৳{{product.price}}</span>
                         <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-sm font-medium">20% OFF</span>
                     </div>
                     <!-- Rating -->
@@ -76,22 +47,14 @@
                             <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
                             <i data-lucide="star-half" class="w-5 h-5 text-yellow-400"></i>
                         </div>
-                        <span class="text-gray-600">(4.5/5)</span>
-                        <span class="text-gray-600">128 Reviews</span>
+                        <span class="text-gray-600">({{product.rating}}/5)</span>
+                        <span class="text-gray-600">{{product.num_reviews}} Reviews</span>
                     </div>
                 </div>
 
                 <!-- Variant Selection -->
                 <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Fragrance</label>
-                        <div class="flex flex-wrap gap-2">
-                            <button class="px-4 py-2 border-2 border-primary text-primary rounded-lg">Fresh Linen</button>
-                            <button class="px-4 py-2 border-2 border-gray-200 hover:border-primary rounded-lg">Ocean Breeze</button>
-                            <button class="px-4 py-2 border-2 border-gray-200 hover:border-primary rounded-lg">Vanilla</button>
-                            <button class="px-4 py-2 border-2 border-gray-200 hover:border-primary rounded-lg">Lavender</button>
-                        </div>
-                    </div>
+                    
                     
                     <!-- Quantity -->
                     <div>
@@ -107,7 +70,7 @@
                 <!-- Stock Status -->
                 <div class="flex items-center gap-2 text-green-600">
                     <i data-lucide="check-circle" class="w-5 h-5"></i>
-                    <span>In Stock (50+ units)</span>
+                    <span>In Stock ({{product.stock}}+ units)</span>
                 </div>
 
                 <!-- Action Buttons -->
@@ -141,7 +104,7 @@
                     <div class="flex items-center gap-3">
                         <i data-lucide="truck" class="w-5 h-5 text-gray-600"></i>
                         <div>
-                            <p class="text-sm font-medium">Free Delivery</p>
+                            <p class="text-sm font-medium">Fast Delivery</p>
                             <p class="text-xs text-gray-500">Within 3-5 working days</p>
                         </div>
                     </div>
@@ -179,17 +142,9 @@
 
             <!-- Tab Contents -->
             <div x-show="activeTab === 'description'" class="space-y-4">
-                <p class="text-gray-600">
-                    Experience the ultimate in car freshness with our Premium Edition Air Freshener. This high-quality product is designed to provide long-lasting fragrance and superior performance for your vehicle.
-                </p>
-                <h3 class="font-semibold">Key Features:</h3>
-                <ul class="list-disc pl-5 text-gray-600 space-y-2">
-                    <li>Long-lasting fragrance up to 60 days</li>
-                    <li>Premium quality ingredients</li>
-                    <li>Adjustable fragrance intensity</li>
-                    <li>Easy to install and replace</li>
-                    <li>Safe for all vehicle interiors</li>
-                </ul>
+                <div class="prose">
+                    {{product.description|safe}}
+                </div>
             </div>
 
             <div x-show="activeTab === 'specifications'" class="space-y-4">
@@ -338,35 +293,27 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Return Policy -->
                 <div class="flex flex-col items-center text-center">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-10%2015-15-47-uuYscoJLcb9XRdBoJtzyR1peuNCxOW.png" alt="Return Policy" class="w-16 h-16 mb-4">
-                    <h3 class="font-semibold mb-2">বিভিন্ন পেমেন্ট</h3>
-                    <p class="text-gray-600 text-sm">বিভিন্ন পেমেন্ট পদ্ধতি থেকে বেছে নিন</p>
-                    <div class="flex gap-2 mt-4">
-                        <img src="/placeholder.svg?height=30&width=30" alt="bKash" class="h-8">
-                        <img src="/placeholder.svg?height=30&width=30" alt="Nagad" class="h-8">
-                        <img src="/placeholder.svg?height=30&width=30" alt="Rocket" class="h-8">
-                    </div>
+                    <img src="{% static 'pay.png' %}" alt="Return Policy" class="w-16 h-16 mb-4">
+                    <h3 class="font-semibold mb-1">Secure Payment</h3>
+                    <p class="text-gray-600 text-sm">Pay now or choose cash on delivery.</p>
+                   
                 </div>
 
                 <!-- Quick Delivery -->
                 <div class="flex flex-col items-center text-center">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-10%2015-15-47-uuYscoJLcb9XRdBoJtzyR1peuNCxOW.png" alt="Quick Delivery" class="w-16 h-16 mb-4">
-                    <h3 class="font-semibold mb-2">ফ্রি ডেলিভারি</h3>
-                    <p class="text-gray-600 text-sm">৩-৫ দিনের মধ্যে আপনার পণ্য পৌঁছে যাবে</p>
-                    <div class="flex gap-2 mt-4">
-                        <img src="/placeholder.svg?height=30&width=30" alt="Pathao" class="h-8">
-                        <img src="/placeholder.svg?height=30&width=30" alt="Steadfast" class="h-8">
-                    </div>
+                    <img src="{% static 'delivery.png' %}" alt="Quick Delivery" class="w-16 h-16 mb-4">
+                    <h3 class="font-semibold mb-1">Fast Delivery</h3>
+                    <p class="text-gray-600 text-sm">Delivery in 1-3 days.</p>
+                    
                 </div>
 
                 <!-- 100% Original -->
                 <div class="flex flex-col items-center text-center">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-10%2015-15-47-uuYscoJLcb9XRdBoJtzyR1peuNCxOW.png" alt="100% Original" class="w-16 h-16 mb-4">
-                    <h3 class="font-semibold mb-2">১০০% অরিজিনাল</h3>
-                    <p class="text-gray-600 text-sm">গুণগতমান উৎপাদন ব্যবহার করতে আমরা প্রতিশ্রুতিবদ্ধ</p>
-                    <div class="mt-4">
-                        <img src="/placeholder.svg?height=40&width=100" alt="Quality Guarantee" class="h-10">
-                    </div>
+                    <img src="{% static 'quality.png' %}" alt="100% Original" class="w-16 h-16 mb-4">
+                    <h3 class="font-semibold mb-2">100% Original</h3>
+                    <p class="text-gray-600 text-sm">Don't worry about quality.</p>
+                   
                 </div>
             </div>
-        
+</div>
+            {% endblock %}
