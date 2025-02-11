@@ -107,3 +107,12 @@ class Thumbnail(BaseModel):
 class FlushSell(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
 
+
+
+class Coupon(BaseModel):
+    code = models.CharField(max_length=50, unique=True)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.code

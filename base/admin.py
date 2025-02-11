@@ -9,6 +9,10 @@ class ThumbnailInline(admin.TabularInline):  # Inline admin for thumbnails
     model = Thumbnail
     extra = 1
 
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_display = ('code', 'discount_amount', 'is_active')
+    search_fields = ('code',)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

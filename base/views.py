@@ -1,6 +1,17 @@
 from django.shortcuts import render, redirect
 from base.models import *
+from django.http import JsonResponse
 
+
+
+def check_coupon(request):
+    code = request.GET.get('code', '').strip().lower()
+
+    try:
+        coupon = Coupon.objects.get(code__iexact=code, is_active=True)
+        return JsonResponse({"valid": True, "discount": float(coupon.discount_amount)})
+    except Coupon.DoesNotExist:
+        return JsonResponse({"valid": False, "discount": 0})
 
 
 
@@ -29,3 +40,14 @@ def product_view(r, slug):
     except:
         return redirect('/')
     return render(r, 'product-view.html', context)
+
+
+
+
+def checkout(r):
+    if r.method == 'GET':
+        product = Product.objects.get(id=r.GET.get('product_id'))
+        context = {
+            'product' : product
+        }
+        return render(r, 'checkout.html', context)

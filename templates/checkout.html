@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+<div class="max-w-5xl mx-auto">
+    <h1 class="text-2xl font-bold mb-8">Checkout</h1>
+
+    <form id="checkoutForm" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Personal Information -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-lg font-semibold mb-4">Personal Information</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm mb-1">Full Name <span class="text-red-500">*</span></label>
+                        <div class="flex">
+                            <div class="bg-gray-50 px-3 py-2 rounded-l-md border border-r-0">
+                                <i data-lucide="user" class="w-5 h-5 text-gray-500"></i>
+                            </div>
+                            <input type="text" name="full_name" required placeholder="Enter your full name"
+                                   class="flex-1 border rounded-r-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm mb-1">Phone Number <span class="text-red-500">*</span></label>
+                        <div class="flex">
+                            <div class="bg-gray-50 px-3 py-2 rounded-l-md border border-r-0">
+                                <i data-lucide="phone" class="w-5 h-5 text-gray-500"></i>
+                            </div>
+                            <input type="tel" name="phone_number" required placeholder="Enter your phone number"
+                                   class="flex-1 border rounded-r-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm mb-1">Email Address</label>
+                        <div class="flex">
+                            <div class="bg-gray-50 px-3 py-2 rounded-l-md border border-r-0">
+                                <i data-lucide="mail" class="w-5 h-5 text-gray-500"></i>
+                            </div>
+                            <input type="email" name="email" placeholder="Enter your email address"
+                                   class="flex-1 border rounded-r-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Information -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-lg font-semibold mb-4">Delivery Information</h2>
+                
+                <div class="mb-6">
+                    <label class="block text-sm mb-1">Delivery Address <span class="text-red-500">*</span></label>
+                    <div class="flex">
+                        <div class="bg-gray-50 px-3 py-2 rounded-l-md border border-r-0">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-gray-500"></i>
+                        </div>
+                        <textarea name="address" required rows="3" placeholder="Enter your full delivery address"
+                                  class="flex-1 border rounded-r-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]"></textarea>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium mb-2">Shipping Method</label>
+                    <div class="space-y-2 border rounded-md">
+                        <label class="flex items-center justify-between p-3 cursor-pointer hover:bg-gray-50">
+                            <div class="flex items-center">
+                                <input type="radio" name="shipping_method" value="dhaka" required
+                                       class="w-4 h-4 text-[#FF8C00] focus:ring-[#FF8C00]">
+                                <span class="ml-2">Inside Dhaka City</span>
+                            </div>
+                            <span>Tk 70.00</span>
+                        </label>
+                        <label class="flex items-center justify-between p-3 border-t cursor-pointer hover:bg-gray-50">
+                            <div class="flex items-center">
+                                <input type="radio" name="shipping_method" value="chittagong" required
+                                       class="w-4 h-4 text-[#FF8C00] focus:ring-[#FF8C00]">
+                                <span class="ml-2">Inside Chittagong City</span>
+                            </div>
+                            <span>Tk 70.00</span>
+                        </label>
+                        <label class="flex items-center justify-between p-3 border-t cursor-pointer hover:bg-gray-50">
+                            <div class="flex items-center">
+                                <input type="radio" name="shipping_method" value="outside" required
+                                       class="w-4 h-4 text-[#FF8C00] focus:ring-[#FF8C00]">
+                                <span class="ml-2">Outside Dhaka & Chittagong</span>
+                            </div>
+                            <span>Tk 130.00</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-lg font-semibold mb-4">Payment Method</h2>
+                <div class="space-y-3">
+                    <label class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-gray-50">
+                        <input type="radio" name="payment_method" value="cash" required class="w-4 h-4 text-[#FF8C00] focus:ring-[#FF8C00]">
+                        <i data-lucide="banknote" class="w-5 h-5 text-gray-500 ml-2 mr-3"></i>
+                        <div>
+                            <div class="font-medium">Cash on Delivery</div>
+                            <div class="text-sm text-gray-500">Pay when you receive</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-gray-50">
+                        <input type="radio" name="payment_method" value="bkash" required class="w-4 h-4 text-[#FF8C00] focus:ring-[#FF8C00]">
+                        <img src="/placeholder.svg?height=24&width=24" alt="bKash" class="w-5 h-5 ml-2 mr-3">
+                        <div>
+                            <div class="font-medium">bKash</div>
+                            <div class="text-sm text-gray-500">Pay with bKash mobile banking</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-gray-50">
+                        <input type="radio" name="payment_method" value="nagad" required class="w-4 h-4 text-[#FF8C00] focus:ring-[#FF8C00]">
+                        <img src="/placeholder.svg?height=24&width=24" alt="Nagad" class="w-5 h-5 ml-2 mr-3">
+                        <div>
+                            <div class="font-medium">Nagad</div>
+                            <div class="text-sm text-gray-500">Pay with Nagad mobile banking</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-lg font-semibold mb-4">Order Summary</h2>
+                
+                <div class="space-y-4 mb-6">
+                    <div class="flex gap-4">
+                        <img src="{{product.featured_image.url}}" alt="Product" class="w-20 h-20 object-cover rounded-md">
+                        <div class="flex-1">
+                            <h3 class="font-medium">{{product.name}}</h3>
+                            <div class="text-sm text-gray-500">Quantity: 1</div>
+                            <div class="font-medium">Tk {{product.discount_price}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex gap-2">
+                        <input type="text" id="couponCode" placeholder="Enter coupon code"
+                               class="flex-1 border rounded-l-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">
+                        <button type="button" id="applyCoupon" class="bg-[#FF8C00] text-black px-4 py-2 rounded-r-md hover:bg-[#FF8C00]/90">
+                            Apply
+                        </button>
+                    </div>
+                    <div id="couponMessage" class="mt-2 text-sm"></div>
+                </div>
+
+
+                <div class="space-y-2 text-sm border-t pt-4">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span>Tk {{product.discount_price}}</span>
+
+                        <input type="hidden" id="product_price" value="{{product.discount_price}}">
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Shipping</span>
+                        <span id="shippingCost">Tk 0.00</span>
+                    </div>
+                    <div id="discountRow" class="flex justify-between text-green-600" style="display: none;">
+                        <span>Discount</span>
+                        <span id="discountAmount">- Tk 0.00</span>
+                    </div>
+                    <div class="flex justify-between font-medium text-base pt-2 border-t">
+                        <span>Total</span>
+                        <span id="totalAmount"></span>
+
+                        <input type="hidden" id="total_price_to_pay" name="total_price_to_pay">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-[#FF8C00] text-black py-4 rounded-lg hover:bg-[#FF8C00]/90 font-medium">
+                Place Order
+            </button>
+
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <i data-lucide="shield-check" class="w-8 h-8 mx-auto mb-2 text-[#FF8C00]"></i>
+                        <div class="text-sm font-medium">Secure Payment</div>
+                    </div>
+                    <div class="text-center">
+                        <i data-lucide="truck" class="w-8 h-8 mx-auto mb-2 text-[#FF8C00]"></i>
+                        <div class="text-sm font-medium">Fast Delivery</div>
+                    </div>
+                    <div class="text-center">
+                        <i data-lucide="package" class="w-8 h-8 mx-auto mb-2 text-[#FF8C00]"></i>
+                        <div class="text-sm font-medium">Quality Products</div>
+                    </div>
+                    <div class="text-center">
+                        <i data-lucide="headphones" class="w-8 h-8 mx-auto mb-2 text-[#FF8C00]"></i>
+                        <div class="text-sm font-medium">24/7 Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkoutForm = document.getElementById('checkoutForm');
+        const couponCode = document.getElementById('couponCode');
+        const applyCouponBtn = document.getElementById('applyCoupon');
+        const couponMessage = document.getElementById('couponMessage');
+        const discountRow = document.getElementById('discountRow');
+        const discountAmount = document.getElementById('discountAmount');
+        const shippingCost = document.getElementById('shippingCost');
+        const totalAmount = document.getElementById('totalAmount');
+
+        let subtotal = parseFloat(document.getElementById("product_price").value) || 0;
+
+    
+        let discount = 0;
+        let shipping = 0;
+
+        function updateTotal() {
+            const total = subtotal + shipping - discount;
+            totalAmount.textContent = `Tk ${total.toFixed(2)}`;
+            document.getElementById('total_price_to_pay').setAttribute("value", total.toFixed(2));
+        }
+
+        updateTotal()
+        // Shipping method change handler
+        checkoutForm.addEventListener('change', function(e) {
+            if (e.target.name === 'shipping_method') {
+                const selectedMethod = e.target.value;
+                if (selectedMethod === 'dhaka' || selectedMethod === 'chittagong') {
+                    shipping = 70;
+                } else if (selectedMethod === 'outside') {
+                    shipping = 130;
+                }
+                shippingCost.textContent = `Tk ${shipping.toFixed(2)}`;
+                updateTotal();
+            }
+        });
+
+        // Dummy fetch function to simulate API call
+        async function fetchCouponData(code) {
+    try {
+        const response = await fetch(`/api/check-coupon?code=${encodeURIComponent(code)}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+        
+            throw new Error('Failed to fetch coupon data');
+        }
+
+        const data = await response.json();
+        return { 
+            valid: data.valid, 
+            discount: data.discount || 0 
+        };
+    } catch (error) {
+        console.error('Error fetching coupon data:', error);
+        return { valid: false, discount: 0 };
+    }
+}
+
+
+        // Apply coupon button click handler
+        applyCouponBtn.addEventListener('click', async function() {
+            if (!couponCode.value) {
+                couponMessage.textContent = 'Please enter a coupon code.';
+                couponMessage.className = 'mt-2 text-sm text-red-600';
+                return;
+            }
+
+            couponMessage.textContent = 'Applying coupon...';
+            couponMessage.className = 'mt-2 text-sm text-gray-600';
+
+            try {
+                const response = await fetchCouponData(couponCode.value);
+                
+                if (response.valid) {
+                    discount = response.discount;
+                    discountRow.style.display = 'flex';
+                    discountAmount.textContent = `- Tk ${discount.toFixed(2)}`;
+                    couponMessage.textContent = 'Coupon applied successfully!';
+                    couponMessage.className = 'mt-2 text-sm text-green-600';
+                } else {
+                    discount = 0;
+                    discountRow.style.display = 'none';
+                    discountAmount.textContent = '- Tk 0.00';
+                    couponMessage.textContent = 'Invalid coupon code.';
+                    couponMessage.className = 'mt-2 text-sm text-red-600';
+                }
+                updateTotal();
+            } catch (error) {
+                console.error('Error applying coupon:', error);
+                couponMessage.textContent = 'Error applying coupon. Please try again.';
+                couponMessage.className = 'mt-2 text-sm text-red-600';
+            }
+        });
+    });
+
+</script>
+
+{% endblock %}
