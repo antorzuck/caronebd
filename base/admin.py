@@ -4,6 +4,17 @@ from .models import *
 
 admin.site.register(Banner)
 admin.site.register(FlushSell)
+admin.site.register(OrderItem)
+
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'full_name', 'phone_number', 'shipping_method', 'total_price')
+    search_fields = ('full_name', 'phone_number', 'email')
+    list_filter = ('shipping_method', 'created_at')
+    ordering = ('-created_at',)
+
 
 class ThumbnailInline(admin.TabularInline):  # Inline admin for thumbnails
     model = Thumbnail

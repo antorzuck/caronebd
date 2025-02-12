@@ -116,3 +116,40 @@ class Coupon(BaseModel):
 
     def __str__(self):
         return self.code
+
+
+
+
+
+class Order(BaseModel):
+    SHIPPING_CHOICES = [
+        ('dhaka', 'Inside Dhaka City'),
+        ('chittagong', 'Inside Chittagong City'),
+        ('outside', 'Outside Dhaka & Chittagong'),
+    ]
+
+    full_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=15)
+    email = models.EmailField(blank=True, null=True)
+    address = models.TextField()
+    shipping_method = models.CharField(max_length=20, choices=SHIPPING_CHOICES)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    shipping_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Order #{self.id} - {self.full_name}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
+
+    def save(self, *args, **kwargs):
+        self.subtotal = self.product.discount_price * self.quantity
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.product.name} (x{self.quantity}) - {self.subtotal}"

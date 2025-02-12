@@ -5,7 +5,9 @@
 <div class="max-w-5xl mx-auto">
     <h1 class="text-2xl font-bold mb-8">Checkout</h1>
 
-    <form id="checkoutForm" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <form method="POST" id="checkoutForm" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        {% csrf_token %}
         <div class="lg:col-span-2 space-y-8">
             <!-- Personal Information -->
             <div class="bg-white rounded-lg shadow-sm p-6">
@@ -91,37 +93,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Payment Method -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-lg font-semibold mb-4">Payment Method</h2>
-                <div class="space-y-3">
-                    <label class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-gray-50">
-                        <input type="radio" name="payment_method" value="cash" required class="w-4 h-4 text-[#FF8C00] focus:ring-[#FF8C00]">
-                        <i data-lucide="banknote" class="w-5 h-5 text-gray-500 ml-2 mr-3"></i>
-                        <div>
-                            <div class="font-medium">Cash on Delivery</div>
-                            <div class="text-sm text-gray-500">Pay when you receive</div>
-                        </div>
-                    </label>
-                    <label class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-gray-50">
-                        <input type="radio" name="payment_method" value="bkash" required class="w-4 h-4 text-[#FF8C00] focus:ring-[#FF8C00]">
-                        <img src="/placeholder.svg?height=24&width=24" alt="bKash" class="w-5 h-5 ml-2 mr-3">
-                        <div>
-                            <div class="font-medium">bKash</div>
-                            <div class="text-sm text-gray-500">Pay with bKash mobile banking</div>
-                        </div>
-                    </label>
-                    <label class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-gray-50">
-                        <input type="radio" name="payment_method" value="nagad" required class="w-4 h-4 text-[#FF8C00] focus:ring-[#FF8C00]">
-                        <img src="/placeholder.svg?height=24&width=24" alt="Nagad" class="w-5 h-5 ml-2 mr-3">
-                        <div>
-                            <div class="font-medium">Nagad</div>
-                            <div class="text-sm text-gray-500">Pay with Nagad mobile banking</div>
-                        </div>
-                    </label>
-                </div>
-            </div>
         </div>
 
         <!-- Order Summary -->
@@ -134,7 +105,8 @@
                         <img src="{{product.featured_image.url}}" alt="Product" class="w-20 h-20 object-cover rounded-md">
                         <div class="flex-1">
                             <h3 class="font-medium">{{product.name}}</h3>
-                            <div class="text-sm text-gray-500">Quantity: 1</div>
+                            <div class="text-sm text-gray-500">Quantity: {{quantity}}</div>
+                            <input type="hidden" id="quantity" name="quantity" value="{{quantity}}">
                             <div class="font-medium">Tk {{product.discount_price}}</div>
                         </div>
                     </div>
@@ -154,8 +126,9 @@
 
                 <div class="space-y-2 text-sm border-t pt-4">
                     <div class="flex justify-between">
-                        <span>Subtotal</span>
-                        <span>Tk {{product.discount_price}}</span>
+                        <span id="subtotalLabel">Subtotal</span>
+                        <span id="subtotalValue">Tk 0.00</span>
+                        
 
                         <input type="hidden" id="product_price" value="{{product.discount_price}}">
                     </div>
@@ -172,6 +145,9 @@
                         <span id="totalAmount"></span>
 
                         <input type="hidden" id="total_price_to_pay" name="total_price_to_pay">
+                        <input type="hidden" id="total_shipping_to_pay" name="total_shipping_to_pay">
+                        <input type="hidden" id="total_discount_amount" name="total_discount_amount">
+                        <input type="hidden" name="product_id" value="{{product.id}}">
                     </div>
                 </div>
             </div>
@@ -204,8 +180,6 @@
     </form>
 </div>
 
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const checkoutForm = document.getElementById('checkoutForm');
@@ -217,28 +191,53 @@
         const shippingCost = document.getElementById('shippingCost');
         const totalAmount = document.getElementById('totalAmount');
 
-        let subtotal = parseFloat(document.getElementById("product_price").value) || 0;
+        const subtotalLabel = document.getElementById('subtotalLabel');
+        const subtotalValue = document.getElementById('subtotalValue');
 
-    
+        // Get the price and quantity values
+        const quantityInput = document.getElementById('quantity');
+        const productPriceInput = document.getElementById("product_price");
+
         let discount = 0;
         let shipping = 0;
 
+        // Function to update total price calculation
         function updateTotal() {
-            const total = subtotal + shipping - discount;
+            const quantity = parseInt(quantityInput.value) || 1; // Get quantity, default to 1
+            const productPrice = parseFloat(productPriceInput.value) || 0; // Get product price, default to 0
+            
+            // Subtotal calculation (price * quantity)
+            let subtotal = productPrice * quantity;
+
+            subtotalValue.textContent = `Tk ${subtotal.toFixed(2)}`;
+
+            // Total calculation (subtotal + shipping - discount)
+            let total = subtotal + shipping - discount;
+
+            // Update UI elements with calculated values
             totalAmount.textContent = `Tk ${total.toFixed(2)}`;
-            document.getElementById('total_price_to_pay').setAttribute("value", total.toFixed(2));
+            document.getElementById('total_price_to_pay').value = total.toFixed(2);
+            document.getElementById('total_shipping_to_pay').value = shipping.toFixed(2);
+            document.getElementById('total_discount_amount').value = discount.toFixed(2);
         }
 
-        updateTotal()
+        // Initial total calculation
+        updateTotal();
+
         // Shipping method change handler
         checkoutForm.addEventListener('change', function(e) {
             if (e.target.name === 'shipping_method') {
                 const selectedMethod = e.target.value;
+
                 if (selectedMethod === 'dhaka' || selectedMethod === 'chittagong') {
                     shipping = 70;
                 } else if (selectedMethod === 'outside') {
                     shipping = 130;
+                } else {
+                    shipping = 0; // Default no shipping
                 }
+
+                // Update the shipping cost display
                 shippingCost.textContent = `Tk ${shipping.toFixed(2)}`;
                 updateTotal();
             }
@@ -246,30 +245,28 @@
 
         // Dummy fetch function to simulate API call
         async function fetchCouponData(code) {
-    try {
-        const response = await fetch(`/api/check-coupon?code=${encodeURIComponent(code)}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
+            try {
+                const response = await fetch(`/api/check-coupon?code=${encodeURIComponent(code)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch coupon data');
+                }
+
+                const data = await response.json();
+                return { 
+                    valid: data.valid, 
+                    discount: data.discount || 0 
+                };
+            } catch (error) {
+                console.error('Error fetching coupon data:', error);
+                return { valid: false, discount: 0 };
             }
-        });
-
-        if (!response.ok) {
-        
-            throw new Error('Failed to fetch coupon data');
         }
-
-        const data = await response.json();
-        return { 
-            valid: data.valid, 
-            discount: data.discount || 0 
-        };
-    } catch (error) {
-        console.error('Error fetching coupon data:', error);
-        return { valid: false, discount: 0 };
-    }
-}
-
 
         // Apply coupon button click handler
         applyCouponBtn.addEventListener('click', async function() {
@@ -306,7 +303,7 @@
             }
         });
     });
-
 </script>
+
 
 {% endblock %}
