@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from base.models import *
 from django.http import JsonResponse
 
-
+from django.views.decorators.csrf import csrf_exempt
 
 def check_coupon(request):
     code = request.GET.get('code', '').strip().lower()
@@ -93,5 +93,67 @@ def checkout(request):
     return render(request, "checkout.html")
 
 
-def cart(r):
-    return render(r, 'cart.html')
+
+
+def cart(request):
+    cart = Cart.objects.get(user=request.user)
+
+    cart_items = cart.cart_items.all()
+    total_price = sum(item.total_price() for item in cart_items)
+
+
+    
+    return render(request, 'cart.html', {
+    'cart': cart, 
+    'cart_items': cart_items,
+    'subtotal' : total_price
+    
+    })
+
+
+
+
+def add_to_cart(request):
+    product_id = request.GET.get('product_id')
+    quantity = request.GET.get('quantity', 1)
+    
+    if not product_id:
+        return JsonResponse({'error': 'Product ID is required'}, status=400)
+    
+    product = get_object_or_404(Product, id=product_id)
+    
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'User must be logged in'}, status=401)
+
+    try:
+        cart = Cart.objects.get(user=request.user, is_paid=False)
+    except :
+        cart = Cart.objects.create(user=request.user)
+    
+    cart_item, item_created = CartItems.objects.get_or_create(cart=cart, product=product)
+    cart_item.quantity += int(quantity)
+    cart_item.save()
+    
+    return redirect('/cart')
+
+
+
+
+@csrf_exempt
+def update_cart_item(request, item_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        quantity = data.get('quantity')
+
+        # Fetch the cart item and update its quantity
+        cart_item = get_object_or_404(CartItem, id=item_id)
+        cart_item.quantity = quantity
+        cart_item.save()
+
+        # Recalculate the total price
+        cart = cart_item.cart
+        cart_total = sum(item.product.price * item.quantity for item in cart.cart_items.all())
+        cart.total_price = cart_total
+        cart.save()
+
+        return JsonResponse({'success': True, 'new_total_price': cart_total})

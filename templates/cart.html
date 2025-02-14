@@ -1,117 +1,91 @@
 {% extends 'base.html' %}
 
-
 {% block body %}
-        <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
+    <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                {% if cart_items %}
 
-        <div x-data="cartPage()" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <template x-for="(item, index) in cartItems" :key="index">
-                        <div class="flex items-center py-6 border-b" :class="{ 'border-b-0': index === cartItems.length - 1 }">
-                            <img :src="item.image" :alt="item.name" class="w-24 h-24 object-cover rounded-md">
+                    {% for item in cart_items %}
+                        <div class="flex items-center py-6 border-b">
+                            <img src="{{ item.product.featured_image.url }}" alt="{{ item.product.name }}" class="w-24 h-24 object-cover rounded-md">
                             <div class="ml-4 flex-1">
-                                <h2 class="text-lg font-semibold" x-text="item.name"></h2>
-                                <p class="text-gray-600" x-text="item.description"></p>
+                                <h2 class="text-lg font-semibold">{{ item.product.name }}</h2>
+                                <p class="text-gray-600">{{ item.description }}</p>
                                 <div class="mt-2 flex items-center justify-between">
                                     <div class="flex items-center border rounded-md">
-                                        <button @click="decreaseQuantity(index)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-l-md">-</button>
-                                        <span class="px-3 py-1" x-text="item.quantity"></span>
-                                        <button @click="increaseQuantity(index)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-r-md">+</button>
+                                        <a href="/cart/decrease/{{ item.id }}/" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-l-md">-</a>
+                                        <span class="px-3 py-1">{{ item.quantity }}</span>
+                                        <a href="/cart/increase/{{ item.id }}/" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-r-md">+</a>
                                     </div>
-                                    <p class="font-semibold" x-text="`৳${(item.price * item.quantity).toFixed(2)}`"></p>
+                                    <p class="font-semibold">৳fdgdfg</p>
                                 </div>
                             </div>
-                            <button @click="removeItem(index)" class="ml-4 text-red-500 hover:text-red-700">
+                            <a href="/cart/remove/{{ item.id }}/" class="ml-4 text-red-500 hover:text-red-700">
                                 <i data-lucide="trash-2" class="w-5 h-5"></i>
-                            </button>
+                            </a>
                         </div>
-                    </template>
-                    <template x-if="cartItems.length === 0">
-                        <div class="text-center py-8">
-                            <i data-lucide="shopping-cart" class="w-16 h-16 mx-auto text-gray-400 mb-4"></i>
-                            <p class="text-xl text-gray-600">Your cart is empty</p>
-                            <a href="#" class="mt-4 inline-block bg-[#FF8C00] text-white px-6 py-2 rounded-md hover:bg-[#FF8C00]/90">Start Shopping</a>
-                        </div>
-                    </template>
-                </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-8">
+                        <i data-lucide="shopping-cart" class="w-16 h-16 mx-auto text-gray-400 mb-4"></i>
+                        <p class="text-xl text-gray-600">Your cart is empty</p>
+                        <a href="#" class="mt-4 inline-block bg-[#FF8C00] text-white px-6 py-2 rounded-md hover:bg-[#FF8C00]/90">Start Shopping</a>
+                    </div>
+                {% endif %}
             </div>
+        </div>
 
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
-                    <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
+                <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+                {% if cart_items %}
                     <div class="space-y-2 text-sm border-b pb-4 mb-4">
                         <div class="flex justify-between">
                             <span>Subtotal</span>
-                            <span x-text="`৳${subtotal.toFixed(2)}`"></span>
+                            <span>৳{{ subtotal }}</span>
                         </div>
-                        <div class="flex justify-between">
+                        <div class="flex justify-between items-center">
                             <span>Shipping</span>
-                            <span>৳70.00</span>
+                            <select id="shipping-method" class="border p-1 rounded">
+                                <option value="70">Standard - ৳70.00</option>
+                                <option value="100">Express - ৳100.00</option>
+                                <option value="50">Economy - ৳50.00</option>
+                            </select>
+                            <span id="shipping-price">৳70.00</span>
                         </div>
                         <div class="flex justify-between">
                             <span>Tax</span>
-                            <span x-text="`৳${tax.toFixed(2)}`"></span>
+                            <span>৳{{ tax }}</span>
                         </div>
                     </div>
                     <div class="flex justify-between font-semibold text-lg">
                         <span>Total</span>
-                        <span x-text="`৳${total.toFixed(2)}`"></span>
+                        <span>৳{{ total }}</span>
                     </div>
-                    <button @click="checkout" class="w-full mt-6 bg-[#FF8C00] text-white py-3 rounded-md hover:bg-[#FF8C00]/90 transition-colors">
+                    <a href="/checkout/" class="w-full mt-6 block bg-[#FF8C00] text-white py-3 text-center rounded-md hover:bg-[#FF8C00]/90 transition-colors">
                         Proceed to Checkout
-                    </button>
-                    <div class="mt-6 text-center">
-                        <p class="text-sm text-gray-600 mb-2">We accept</p>
-                        <div class="flex justify-center space-x-2">
-                            <img src="/placeholder.svg?height=30&width=48" alt="Visa" class="h-8">
-                            <img src="/placeholder.svg?height=30&width=48" alt="Mastercard" class="h-8">
-                            <img src="/placeholder.svg?height=30&width=48" alt="American Express" class="h-8">
-                            <img src="/placeholder.svg?height=30&width=48" alt="PayPal" class="h-8">
-                        </div>
-                    </div>
-                </div>
+                    </a>
+                {% else %}
+                    <p class="text-center text-gray-600">No items in cart</p>
+                {% endif %}
             </div>
         </div>
-    
+    </div>
+
+
 
     <script>
-
-        function cartPage() {
-            return {
-                cartItems: [
-                    { name: "Car Air Freshener", description: "Long-lasting fragrance", price: 399, quantity: 2, image: "/placeholder.svg?height=96&width=96" },
-                    { name: "Steering Wheel Cover", description: "Comfortable grip, universal fit", price: 1050, quantity: 1, image: "/placeholder.svg?height=96&width=96" },
-                    { name: "Headlight Bulb Set", description: "Bright LED, easy installation", price: 2200, quantity: 1, image: "/placeholder.svg?height=96&width=96" }
-                ],
-                get subtotal() {
-                    return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-                },
-                get tax() {
-                    return this.subtotal * 0.15; // Assuming 15% tax
-                },
-                get total() {
-                    return this.subtotal + this.tax + 70; // Adding flat 70 for shipping
-                },
-                increaseQuantity(index) {
-                    this.cartItems[index].quantity++;
-                },
-                decreaseQuantity(index) {
-                    if (this.cartItems[index].quantity > 1) {
-                        this.cartItems[index].quantity--;
-                    }
-                },
-                removeItem(index) {
-                    this.cartItems.splice(index, 1);
-                },
-                checkout() {
-                    alert('Proceeding to checkout!');
-                    // Here you would typically redirect to a checkout page or open a checkout modal
-                }
-            }
-        }
-
-   
+        // Get the select element and shipping price span
+        const shippingMethodSelect = document.getElementById('shipping-method');
+        const shippingPriceSpan = document.getElementById('shipping-price');
+    
+        // Update the shipping price when a new shipping method is selected
+        shippingMethodSelect.addEventListener('change', function() {
+            const selectedPrice = this.value;
+            shippingPriceSpan.textContent = `৳${selectedPrice}.00`;
+        });
     </script>
-
+    
 {% endblock %}

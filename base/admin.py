@@ -6,7 +6,8 @@ admin.site.register(Banner)
 admin.site.register(FlushSell)
 admin.site.register(OrderItem)
 
-
+admin.site.register(Cart)
+admin.site.register(CartItems)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):

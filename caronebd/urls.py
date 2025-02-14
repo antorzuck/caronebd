@@ -13,5 +13,6 @@ urlpatterns = [
     path('checkout', checkout),
     path('api/check-coupon/', check_coupon, name='check-coupon'),
     path('cart', cart),
+    path('add-to-cart', add_to_cart),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

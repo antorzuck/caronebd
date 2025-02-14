@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
+from django.contrib.auth.models import User
+
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -8,6 +10,15 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True 
+
+class Profile(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prof')
+    name = models.CharField(max_length=100)
+    address = models.TextField()
+    phone = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
 
 
 class Banner(models.Model):
@@ -144,7 +155,7 @@ class Order(BaseModel):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=0)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
 
     def save(self, *args, **kwargs):
@@ -153,3 +164,30 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} (x{self.quantity}) - {self.subtotal}"
+
+
+
+
+class Cart(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='carts', null=True,
+    blank=True)
+    is_paid = models.BooleanField(default=False)
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"Cart for {self.user.username}"
+
+
+class CartItems(BaseModel):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+    quantity = models.PositiveIntegerField(default=1)
+    
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+
+
+    def total_price(self):
+        if self.product:
+            return self.quantity * self.product.discount_price
+        return 0

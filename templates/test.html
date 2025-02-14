@@ -1,117 +1,178 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car One BD - Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4" >
 
+    <div x-data="{ showModal: false }">
+    <!-- Trigger Button -->
+    <button 
+        @click="showModal = true"
+        class="bg-[#FF8C00] text-white px-6 py-3 rounded-lg hover:bg-[#FF8C00]/90 transition-colors">
+        Open Sign Up Form
+    </button>
 
-{% block body %}
-        <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
+    
+    <!-- Modal -->
+    <div 
+        x-show="showModal" 
+        x-cloak
+        class="fixed inset-0 z-50 overflow-y-auto"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0">
+        
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/50"></div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <template x-for="(item, index) in cartItems" :key="index">
-                        <div class="flex items-center py-6 border-b" :class="{ 'border-b-0': index === cartItems.length - 1 }">
-                            <img :src="item.image" :alt="item.name" class="w-24 h-24 object-cover rounded-md">
-                            <div class="ml-4 flex-1">
-                                <h2 class="text-lg font-semibold" x-text="item.name"></h2>
-                                <p class="text-gray-600" x-text="item.description"></p>
-                                <div class="mt-2 flex items-center justify-between">
-                                    <div class="flex items-center border rounded-md">
-                                        <button @click="decreaseQuantity(index)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-l-md">-</button>
-                                        <span class="px-3 py-1" x-text="item.quantity"></span>
-                                        <button @click="increaseQuantity(index)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-r-md">+</button>
-                                    </div>
-                                    <p class="font-semibold" x-text="`৳${(item.price * item.quantity).toFixed(2)}`"></p>
-                                </div>
+        <!-- Modal Content -->
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div 
+                @click.away="showModal = false"
+                class="relative bg-white w-full max-w-md rounded-xl shadow-lg"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-90"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-90">
+
+                <!-- Close Button -->
+                <button 
+                    @click="showModal = false"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+
+                <!-- Logo and Title -->
+                <div class="text-center pt-8 pb-6 px-8">
+                    <div class="w-20 h-20 bg-[#FF8C00]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="steering-wheel" class="w-12 h-12 text-[#FF8C00]"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Car One BD</h2>
+                    <p class="mt-2 text-gray-600">Please enter your details to sign up.</p>
+                </div>
+
+                <!-- Form -->
+                <form 
+                    x-data="{ 
+                        showPassword: false,
+                        formData: {
+                            name: '',
+                            phone: '',
+                            address: '',
+                            password: ''
+                        }
+                    }"
+                    @submit.prevent="console.log('Form submitted:', formData)"
+                    class="px-8 pb-8">
+                    
+                    <!-- Name Input -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Full Name <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i data-lucide="user" class="w-5 h-5 text-gray-400"></i>
                             </div>
-                            <button @click="removeItem(index)" class="ml-4 text-red-500 hover:text-red-700">
-                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            <input
+                                type="text"
+                                x-model="formData.name"
+                                required
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8C00] focus:border-transparent"
+                                placeholder="Enter your full name">
+                        </div>
+                    </div>
+
+                    <!-- Phone Input -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Phone Number <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i data-lucide="phone" class="w-5 h-5 text-gray-400"></i>
+                            </div>
+                            <input
+                                type="tel"
+                                x-model="formData.phone"
+                                required
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8C00] focus:border-transparent"
+                                placeholder="Enter your phone number">
+                        </div>
+                    </div>
+
+                    <!-- Address Input -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Delivery Address <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute top-3 left-3 pointer-events-none">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-gray-400"></i>
+                            </div>
+                            <textarea
+                                x-model="formData.address"
+                                required
+                                rows="3"
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8C00] focus:border-transparent"
+                                placeholder="Enter your delivery address"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Password <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i data-lucide="lock" class="w-5 h-5 text-gray-400"></i>
+                            </div>
+                            <input
+                                :type="showPassword ? 'text' : 'password'"
+                                x-model="formData.password"
+                                required
+                                class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8C00] focus:border-transparent"
+                                placeholder="Enter your password">
+                            <button 
+                                type="button"
+                                @click="showPassword = !showPassword"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <i 
+                                    :data-lucide="showPassword ? 'eye-off' : 'eye'"
+                                    class="w-5 h-5 text-gray-400 hover:text-gray-600"></i>
                             </button>
                         </div>
-                    </template>
-                    <template x-if="cartItems.length === 0">
-                        <div class="text-center py-8">
-                            <i data-lucide="shopping-cart" class="w-16 h-16 mx-auto text-gray-400 mb-4"></i>
-                            <p class="text-xl text-gray-600">Your cart is empty</p>
-                            <a href="#" class="mt-4 inline-block bg-[#FF8C00] text-white px-6 py-2 rounded-md hover:bg-[#FF8C00]/90">Start Shopping</a>
-                        </div>
-                    </template>
-                </div>
-            </div>
+                    </div>
 
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
-                    <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-                    <div class="space-y-2 text-sm border-b pb-4 mb-4">
-                        <div class="flex justify-between">
-                            <span>Subtotal</span>
-                            <span x-text="`৳${subtotal.toFixed(2)}`"></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Shipping</span>
-                            <span>৳70.00</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Tax</span>
-                            <span x-text="`৳${tax.toFixed(2)}`"></span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between font-semibold text-lg">
-                        <span>Total</span>
-                        <span x-text="`৳${total.toFixed(2)}`"></span>
-                    </div>
-                    <button @click="checkout" class="w-full mt-6 bg-[#FF8C00] text-white py-3 rounded-md hover:bg-[#FF8C00]/90 transition-colors">
-                        Proceed to Checkout
+                    <!-- Submit Button -->
+                    <button
+                        type="submit"
+                        class="w-full bg-[#FF8C00] text-white py-2 rounded-lg hover:bg-[#FF8C00]/90 transition-colors">
+                        Sign Up
                     </button>
-                    <div class="mt-6 text-center">
-                        <p class="text-sm text-gray-600 mb-2">We accept</p>
-                        <div class="flex justify-center space-x-2">
-                            <img src="/placeholder.svg?height=30&width=48" alt="Visa" class="h-8">
-                            <img src="/placeholder.svg?height=30&width=48" alt="Mastercard" class="h-8">
-                            <img src="/placeholder.svg?height=30&width=48" alt="American Express" class="h-8">
-                            <img src="/placeholder.svg?height=30&width=48" alt="PayPal" class="h-8">
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
-    </main>
-
+    </div>
+</div>
     <script>
-
-        function cartPage() {
-            return {
-                cartItems: [
-                    { name: "Car Air Freshener", description: "Long-lasting fragrance", price: 399, quantity: 2, image: "/placeholder.svg?height=96&width=96" },
-                    { name: "Steering Wheel Cover", description: "Comfortable grip, universal fit", price: 1050, quantity: 1, image: "/placeholder.svg?height=96&width=96" },
-                    { name: "Headlight Bulb Set", description: "Bright LED, easy installation", price: 2200, quantity: 1, image: "/placeholder.svg?height=96&width=96" }
-                ],
-                get subtotal() {
-                    return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-                },
-                get tax() {
-                    return this.subtotal * 0.15; // Assuming 15% tax
-                },
-                get total() {
-                    return this.subtotal + this.tax + 70; // Adding flat 70 for shipping
-                },
-                increaseQuantity(index) {
-                    this.cartItems[index].quantity++;
-                },
-                decreaseQuantity(index) {
-                    if (this.cartItems[index].quantity > 1) {
-                        this.cartItems[index].quantity--;
-                    }
-                },
-                removeItem(index) {
-                    this.cartItems.splice(index, 1);
-                },
-                checkout() {
-                    alert('Proceeding to checkout!');
-                    // Here you would typically redirect to a checkout page or open a checkout modal
-                }
-            }
-        }
-
-   
+        lucide.createIcons();
     </script>
+</body>
+</html>
 
-{% endblock %}
