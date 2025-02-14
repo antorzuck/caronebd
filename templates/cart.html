@@ -2,7 +2,17 @@
 
 {% block body %}
     <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
+
+    {% if messages %}
+        {% for m in messages %}
+        <div class="p-4 mb-4 text-sm rounded-lg text-yellow-900 bg-yellow-100" role="alert">
+            <span class="font-medium"></span> {{ m }}
+        </div>
+        {% endfor %}
+        {% endif %}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+
         <div class="lg:col-span-2">
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 {% if cart_items %}
@@ -38,9 +48,29 @@
         </div>
 
         <div class="lg:col-span-1">
+
+            
             <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
                 <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
                 {% if cart_items %}
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                <div class="mb-6">
+                    <div class="flex gap-2">
+                        
+                        <input type="text" name="code" placeholder="Enter coupon code"
+                               class="flex-1 border rounded-l-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">
+                        <button type="submit" id="applyCoupon" class="bg-[#FF8C00] text-black px-4 py-2 rounded-r-md hover:bg-[#FF8C00]/90">
+                            Apply
+                        </button>
+                    
+                    </div>
+                    <div id="couponMessage" class="mt-2 text-sm"></div>
+                </div>
+                </form>
+
+
                     <div class="space-y-2 text-sm border-b pb-4 mb-4">
                         <div class="flex justify-between">
                             <span>Subtotal</span>
@@ -56,13 +86,13 @@
                             <span id="shipping-price">৳70.00</span>
                         </div>
                         <div class="flex justify-between">
-                            <span>Tax</span>
-                            <span>৳{{ tax }}</span>
+                            <span>Coupon Discount</span>
+                            <span>৳{{ coupon_discount }}</span>
                         </div>
                     </div>
                     <div class="flex justify-between font-semibold text-lg">
                         <span>Total</span>
-                        <span>৳{{ total }}</span>
+                        <span>৳{{ total_price_to_pay }}</span>
                     </div>
                     <a href="/checkout/" class="w-full mt-6 block bg-[#FF8C00] text-white py-3 text-center rounded-md hover:bg-[#FF8C00]/90 transition-colors">
                         Proceed to Checkout
@@ -77,15 +107,17 @@
 
 
     <script>
-        // Get the select element and shipping price span
+        
         const shippingMethodSelect = document.getElementById('shipping-method');
         const shippingPriceSpan = document.getElementById('shipping-price');
     
-        // Update the shipping price when a new shipping method is selected
         shippingMethodSelect.addEventListener('change', function() {
             const selectedPrice = this.value;
             shippingPriceSpan.textContent = `৳${selectedPrice}.00`;
         });
+
+
+
     </script>
     
 {% endblock %}

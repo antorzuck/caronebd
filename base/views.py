@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from base.models import *
 from django.http import JsonResponse
-
+from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+
+
 
 def check_coupon(request):
     code = request.GET.get('code', '').strip().lower()
@@ -96,19 +98,62 @@ def checkout(request):
 
 
 def cart(request):
-    cart = Cart.objects.get(user=request.user)
+
+    try:
+        cart = Cart.objects.get(user=request.user)
+    except:
+        return render(request, 'empty.html')
 
     cart_items = cart.cart_items.all()
+
+    if len(cart_items) == 0:
+        return render(request, 'empty.html')
     total_price = sum(item.total_price() for item in cart_items)
+ 
 
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        coupon = Coupon.objects.filter(code=code)
 
-    
-    return render(request, 'cart.html', {
+        if cart.coupon:
+            messages.error(request, "A coupon already exists on this cart.")
+            return redirect('/cart')
+
+        if coupon.exists():
+            if coupon[0].is_active:
+                if total_price >= coupon[0].minimum_spend:
+                    cart.coupon = coupon[0]
+                    cart.save()
+                else:
+                    messages.error(request, f"Minimum amount should be {coupon[0].minimum_spend} or more to use this coupon")
+                    return redirect('/cart')
+                return redirect("/cart")
+            messages.error(request, "You late bro! this coupon has expired")
+        messages.error(request, "This coupon? never heard of that!")
+
+    context = {
     'cart': cart, 
     'cart_items': cart_items,
-    'subtotal' : total_price
+    'subtotal' : total_price,
+    'total_price_to_pay' : total_price
     
-    })
+    }
+
+    if cart.coupon:
+        if total_price < cart.coupon.minimum_spend:
+            messages.info(request, "Dont try to be smart. coupon got removed!")
+            cart.coupon = None
+            cart.save()
+            return redirect('/cart')
+        
+        total_price_to_pay = total_price - cart.coupon.discount_amount
+
+        context['total_price_to_pay'] = total_price_to_pay
+        context['coupon_discount'] = cart.coupon.discount_amount
+
+
+    
+    return render(request, 'cart.html', context)
 
 
 
@@ -157,3 +202,37 @@ def update_cart_item(request, item_id):
         cart.save()
 
         return JsonResponse({'success': True, 'new_total_price': cart_total})
+
+
+
+def increase_quantity(request, product_id):
+    cart = Cart.objects.get(user=request.user, is_paid=False)
+    cart_item = CartItems.objects.get(cart=cart, id=product_id)
+
+    cart_item.quantity += 1
+    cart_item.save()
+
+    return redirect('/cart')
+
+
+def decrease_quantity(request, product_id):
+    cart = get_object_or_404(Cart, user=request.user, is_paid=False)
+    cart_item = get_object_or_404(CartItems, cart=cart, id=product_id)
+
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+    else:
+        cart_item.delete()
+
+    return redirect('/cart')
+
+
+def remove_item(request, product_id):
+    cart = get_object_or_404(Cart, user=request.user, is_paid=False)
+    cart_item = CartItems.objects.filter(cart=cart, id=product_id).first()
+
+    if cart_item:
+        cart_item.delete()
+
+    return redirect('/cart')

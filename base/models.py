@@ -123,6 +123,7 @@ class FlushSell(BaseModel):
 class Coupon(BaseModel):
     code = models.CharField(max_length=50, unique=True)
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    minimum_spend = models.DecimalField(max_digits=10, decimal_places=2)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -181,7 +182,7 @@ class Cart(BaseModel):
 class CartItems(BaseModel):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
