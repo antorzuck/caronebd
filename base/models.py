@@ -12,7 +12,7 @@ class BaseModel(models.Model):
         abstract = True 
 
 class Profile(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prof')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     address = models.TextField()
     phone = models.CharField(max_length=20)

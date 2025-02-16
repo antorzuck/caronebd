@@ -67,9 +67,11 @@ def checkout(request):
         address = request.POST.get("address")
         shipping_method = request.POST.get("shipping_method")
         product_id = request.POST.get("product_id")
+        cart_id = request.POST.get("cart_id")
         discount_amount = float(request.POST.get("total_discount_amount", 0))
         shipping_cost = float(request.POST.get("total_shipping_to_pay", 0))
         total_price = float(request.POST.get("total_price_to_pay", 0))
+
 
         order = Order.objects.create(
             full_name=full_name,
@@ -82,16 +84,18 @@ def checkout(request):
             total_price=total_price,
         )
 
-        get_product = Product.objects.get(id=product_id)
+        if cart_id:
+            get_cart = Cart.objects.get(id=cart_id)
+            products = CartItems.objects.filter(cart=get_cart)
 
-        oic = OrderItem.objects.create(order=order, product=get_product)
+            for p in products:
+                OrderItem.objects.create(order=order, product=p.product)
 
-
-
-
+        if product_id:
+            get_product = Product.objects.get(id=product_id)
+            oic = OrderItem.objects.create(order=order, product=get_product)
 
         return JsonResponse({"success": True, "order_id": order.id})
-
     return render(request, "checkout.html")
 
 
@@ -234,5 +238,8 @@ def remove_item(request, product_id):
 
     if cart_item:
         cart_item.delete()
+
+    if len(CartItems.objects.filter(cart=cart)) == 0:
+        cart.delete()
 
     return redirect('/cart')

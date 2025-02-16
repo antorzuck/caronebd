@@ -56,6 +56,7 @@ TEMPLATES = [
                 
                 'base.context_processors.category_context', 
                 'base.context_processors.site_info_context',
+                'base.context_processors.cart_item_count',
             ],
         },
     },

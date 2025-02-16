@@ -10,7 +10,21 @@
         </div>
         {% endfor %}
         {% endif %}
+        <form method="POST" action="/checkout">
+{% if request.user.is_authenticated %}
+            <input type="hidden" name="full_name" value="{{request.user.profile.name}}">
+            <input type="hidden" name="phone_number" value="{{request.user.profile.phone}}">
+            <input type="hidden" name="address" value="{{request.user.profile.address}}">
+            <input type="hidden" name="email" value="{{request.user.email}}">
+{% endif %}
+<input type="hidden" name="cart_id" value="{{cart.id}}">
+<input type="hidden" name="shipping_method" id="shipping_method" value="70">
+<input type="hidden" name="total_shipping_to_pay" id="total_shipping_to_pay" value="70">
+<input type="hidden" name="total_price_to_pay" id="total_price_to_pay" value="{{ total_price_to_pay }}">
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    {% csrf_token %}
 
 
         <div class="lg:col-span-2">
@@ -71,53 +85,75 @@
                 </form>
 
 
-                    <div class="space-y-2 text-sm border-b pb-4 mb-4">
-                        <div class="flex justify-between">
-                            <span>Subtotal</span>
-                            <span>৳{{ subtotal }}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span>Shipping</span>
-                            <select id="shipping-method" class="border p-1 rounded">
-                                <option value="70">Standard - ৳70.00</option>
-                                <option value="100">Express - ৳100.00</option>
-                                <option value="50">Economy - ৳50.00</option>
-                            </select>
-                            <span id="shipping-price">৳70.00</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Coupon Discount</span>
-                            <span>৳{{ coupon_discount }}</span>
-                        </div>
+                <div class="space-y-2 text-sm border-b pb-4 mb-4">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span id="subtotal">৳{{ subtotal }}</span>
                     </div>
-                    <div class="flex justify-between font-semibold text-lg">
-                        <span>Total</span>
-                        <span>৳{{ total_price_to_pay }}</span>
+                    <div class="flex justify-between items-center">
+                        <span>Shipping</span>
+                        <select id="shipping-method" class="border p-1 rounded">
+                            <option value="70">Inside Dhaka - ৳70.00</option>
+                            <option value="120">Outside Dhaka - ৳120.00</option>
+                    
+                        </select>
+                        <span id="shipping-price">৳70.00</span>
                     </div>
-                    <a href="/checkout/" class="w-full mt-6 block bg-[#FF8C00] text-white py-3 text-center rounded-md hover:bg-[#FF8C00]/90 transition-colors">
-                        Proceed to Checkout
-                    </a>
+                    <div class="flex justify-between">
+                        <span>Coupon Discount</span>
+                        <span id="coupon-discount">৳{{ coupon_discount }}</span>
+                    </div>
+                </div>
+                <div class="flex justify-between font-semibold text-lg">
+                    <span>Total</span>
+                    <span id="total-price">৳{{ total_price_to_pay }}</span>
+                </div>
+                
+                    <button type="submit" class="w-full mt-6 block bg-[#FF8C00] text-white py-3 text-center rounded-md hover:bg-[#FF8C00]/90 transition-colors">
+                        Submit Order
+                    </button>
                 {% else %}
                     <p class="text-center text-gray-600">No items in cart</p>
                 {% endif %}
             </div>
         </div>
+
+
     </div>
 
+</form>
 
+<script>
+    const shippingMethodSelect = document.getElementById('shipping-method');
+    const shippingPriceSpan = document.getElementById('shipping-price');
+    const totalPriceSpan = document.getElementById('total-price');
+    const totalShippingInput = document.getElementById('total_shipping_to_pay');
+    const totalPriceInput = document.getElementById('total_price_to_pay');
 
-    <script>
+    const shippingMethodInput = document.getElementById('shipping_method');
+
+    const subtotal = parseFloat("{{ subtotal }}") || 0;
+    const couponDiscount = parseFloat("{{ coupon_discount }}") || 0;
+
+    function updateTotalPrice() {
+        const selectedShipping = parseFloat(shippingMethodSelect.value) || 0;
+        const totalPrice = subtotal + selectedShipping - couponDiscount;
         
-        const shippingMethodSelect = document.getElementById('shipping-method');
-        const shippingPriceSpan = document.getElementById('shipping-price');
-    
-        shippingMethodSelect.addEventListener('change', function() {
-            const selectedPrice = this.value;
-            shippingPriceSpan.textContent = `৳${selectedPrice}.00`;
-        });
+        totalPriceSpan.textContent = `৳${totalPrice.toFixed(2)}`;
+        totalShippingInput.value = selectedShipping;
+        totalPriceInput.value = totalPrice.toFixed(2);
+        shippingMethodInput.value = shippingMethodSelect.value;
+    }
 
+    shippingMethodSelect.addEventListener('change', function() {
+        const selectedPrice = this.value;
+        shippingPriceSpan.textContent = `৳${selectedPrice}.00`;
+        updateTotalPrice();
+    });
 
+    // Initial update when the page loads
+    updateTotalPrice();
+</script>
 
-    </script>
     
 {% endblock %}

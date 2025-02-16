@@ -1,4 +1,4 @@
-from .models import Category, SiteInfo
+from .models import Category, SiteInfo, Cart, CartItems
 from django.core.cache import cache
 
 
@@ -17,3 +17,19 @@ def site_info_context(request):
         cache.set('site_info', site_info, timeout=3600)
 
     return {'site_info': site_info}
+
+
+
+
+def cart_item_count(request):
+    cart_count = 0
+    if request.user.is_authenticated:
+        try:
+            cart = Cart.objects.get(user=request.user)
+            cart_count = len([item for item in CartItems.objects.filter(cart=cart)])
+
+            print(cart_count)
+        except Cart.DoesNotExist:
+            cart_count = 0
+
+    return {'cart_count': cart_count}

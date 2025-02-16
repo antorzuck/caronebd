@@ -86,8 +86,14 @@
                     <button class="text-white">
                         <i data-lucide="heart" class="w-6 h-6"></i>
                     </button>
-                    <a href="/cart">
+                    <a href="/cart" class="relative">
                     <button class="text-white">
+
+        {% if cart_count > 0 %}
+        <span class="absolute top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
+            {{ cart_count }}
+        </span>
+    {% endif %}
                         <i data-lucide="shopping-cart" class="w-6 h-6"></i>
                     </button>
                 </a>
@@ -334,7 +340,13 @@
                 <i data-lucide="tag" class="w-6 h-6"></i>
                 <span class="text-xs mt-1">Offer</span>
             </a>
-            <a href="#" class="flex flex-col items-center text-gray-600">
+            <a href="/cart" class="flex flex-col items-center text-gray-600 relative">
+
+                {% if cart_count > 0 %}
+        <span class="absolute -top-1 right-5 bg-red-500 text-white text-xs px-1 rounded-full">
+            {{ cart_count }}
+        </span>
+    {% endif %}
                 <i data-lucide="shopping-cart" class="w-6 h-6"></i>
                 <span class="text-xs mt-1">Cart</span>
             </a>
