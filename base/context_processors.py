@@ -14,7 +14,7 @@ def site_info_context(request):
 
     if not site_info:
         site_info = SiteInfo.objects.first()
-        cache.set('site_info', site_info, timeout=3600)
+        cache.set('site_info', site_info, timeout=1000)
 
     return {'site_info': site_info}
 

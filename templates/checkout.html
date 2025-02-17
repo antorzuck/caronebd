@@ -19,7 +19,7 @@
                             <div class="bg-gray-50 px-3 py-2 rounded-l-md border border-r-0">
                                 <i data-lucide="user" class="w-5 h-5 text-gray-500"></i>
                             </div>
-                            <input type="text" name="full_name" required placeholder="Enter your full name"
+                            <input value="{{request.user.profile.name}}" type="text" name="full_name" required placeholder="Enter your full name"
                                    class="flex-1 border rounded-r-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                             <div class="bg-gray-50 px-3 py-2 rounded-l-md border border-r-0">
                                 <i data-lucide="phone" class="w-5 h-5 text-gray-500"></i>
                             </div>
-                            <input type="tel" name="phone_number" required placeholder="Enter your phone number"
+                            <input value="{{request.user.username}}" type="tel" name="phone_number" required placeholder="Enter your phone number"
                                    class="flex-1 border rounded-r-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                             <i data-lucide="map-pin" class="w-5 h-5 text-gray-500"></i>
                         </div>
                         <textarea name="address" required rows="3" placeholder="Enter your full delivery address"
-                                  class="flex-1 border rounded-r-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]"></textarea>
+                                  class="flex-1 border rounded-r-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">{{request.user.profile.address}}</textarea>
                     </div>
                 </div>
 
@@ -181,6 +181,7 @@
 </div>
 
 <script>
+    
     document.addEventListener('DOMContentLoaded', function() {
         const checkoutForm = document.getElementById('checkoutForm');
         const couponCode = document.getElementById('couponCode');

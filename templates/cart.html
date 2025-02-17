@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load custom_filters %}
 {% block body %}
     <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
 
@@ -43,7 +43,7 @@
                                         <span class="px-3 py-1">{{ item.quantity }}</span>
                                         <a href="/cart/increase/{{ item.id }}/" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-r-md">+</a>
                                     </div>
-                                    <p class="font-semibold">৳fdgdfg</p>
+                                    <p class="font-semibold">৳{{ item.quantity|multiply:item.product.discount_price }}</p>
                                 </div>
                             </div>
                             <a href="/cart/remove/{{ item.id }}/" class="ml-4 text-red-500 hover:text-red-700">
@@ -93,8 +93,8 @@
                     <div class="flex justify-between items-center">
                         <span>Shipping</span>
                         <select id="shipping-method" class="border p-1 rounded">
-                            <option value="70">Inside Dhaka - ৳70.00</option>
-                            <option value="120">Outside Dhaka - ৳120.00</option>
+                            <option value="dhaka">Inside Dhaka - ৳70.00</option>
+                            <option value="outside">Outside Dhaka - ৳120.00</option>
                     
                         </select>
                         <span id="shipping-price">৳70.00</span>
@@ -122,34 +122,41 @@
     </div>
 
 </form>
-
 <script>
     const shippingMethodSelect = document.getElementById('shipping-method');
     const shippingPriceSpan = document.getElementById('shipping-price');
     const totalPriceSpan = document.getElementById('total-price');
     const totalShippingInput = document.getElementById('total_shipping_to_pay');
     const totalPriceInput = document.getElementById('total_price_to_pay');
-
     const shippingMethodInput = document.getElementById('shipping_method');
 
     const subtotal = parseFloat("{{ subtotal }}") || 0;
     const couponDiscount = parseFloat("{{ coupon_discount }}") || 0;
 
-    function updateTotalPrice() {
-        const selectedShipping = parseFloat(shippingMethodSelect.value) || 0;
-        const totalPrice = subtotal + selectedShipping - couponDiscount;
-        
-        totalPriceSpan.textContent = `৳${totalPrice.toFixed(2)}`;
-        totalShippingInput.value = selectedShipping;
-        totalPriceInput.value = totalPrice.toFixed(2);
-        shippingMethodInput.value = shippingMethodSelect.value;
+    function getShippingCost(method) {
+        if (method === 'dhaka') {
+            return 70;
+        } else if (method === 'outside') {
+            return 120;
+        } else {
+            return 0;
+        }
     }
 
-    shippingMethodSelect.addEventListener('change', function() {
-        const selectedPrice = this.value;
-        shippingPriceSpan.textContent = `৳${selectedPrice}.00`;
-        updateTotalPrice();
-    });
+    function updateTotalPrice() {
+        const selectedMethod = shippingMethodSelect.value;
+        const shippingCost = getShippingCost(selectedMethod);
+        const totalPrice = subtotal + shippingCost - couponDiscount;
+
+        shippingPriceSpan.textContent = `৳${shippingCost}.00`;
+        totalPriceSpan.textContent = `৳${totalPrice.toFixed(2)}`;
+
+        totalShippingInput.value = shippingCost;
+        totalPriceInput.value = totalPrice.toFixed(2);
+        shippingMethodInput.value = selectedMethod;
+    }
+
+    shippingMethodSelect.addEventListener('change', updateTotalPrice);
 
     // Initial update when the page loads
     updateTotalPrice();

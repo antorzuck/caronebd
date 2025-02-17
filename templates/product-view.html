@@ -101,26 +101,46 @@
 
         
                     <!-- Cash on Delivery Button -->
+
+
+
+
+                    {% if not request.user.is_authenticated %}
+                    <button 
+     @click="showModal = true" 
+    class="w-full bg-[#FF8C00] my-2 text-md text-black py-3 rounded-md hover:bg-[#FF8C00]/90 transition-colors flex items-center justify-center gap-2">
+    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+    Order in Cash On Delivery</button>
+
+    {% else %}
+
                    <a id="checkout-btn" href="/checkout?product_id={{product.id}}&quantity=1"> 
                        <button class="w-full bg-[#FF8C00] my-2 text-md text-black py-3 rounded-md hover:bg-[#FF8C00]/90 transition-colors flex items-center justify-center gap-2">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         Order in Cash On Delivery
                     </button> 
                    </a>
+                {% endif %}
         
                     <!-- Chat with us Button -->
-                    <button class="w-full bg-black text-white py-3 rounded-md hover:bg-black/90 transition-colors flex items-center justify-center gap-2">
+                     <a href="{{site_info.fb_chat}}" class="">
+                    <button class="w-full bg-black mb-2 text-white py-3 rounded-md hover:bg-black/90 transition-colors flex items-center justify-center gap-2">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Facebook_Messenger_logo_2020.svg/2048px-Facebook_Messenger_logo_2020.svg.png" 
                              class="w-5 h-5" alt="Messenger">
                         Chat with us
                     </button>
+
+                    </a>
         
                     <!-- WhatsApp Button -->
+
+                    <a href="{{site_info.w_chat}}">
                     <button class="w-full bg-black text-white py-3 rounded-md hover:bg-black/90 transition-colors flex items-center justify-center gap-2">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/767px-WhatsApp.svg.png" 
                              class="w-5 h-5" alt="WhatsApp">
                         WhatsApp Us
                     </button>
+                </a>
                 </div>
             </div>
         </div>
@@ -170,10 +190,9 @@
                 </div>
 
                 <!-- Form -->
-                <form method="GET" action="/register" 
-                    
-                    
-                    class="px-8 pb-8">
+                <form method="POST" action="/register" class="px-8 pb-8">
+
+                    {% csrf_token %}
                     
                     <!-- Name Input -->
                     <div class="mb-4">
@@ -187,7 +206,6 @@
                             <input
                                 name="full_name"
                                 type="text"
-                                x-model="formData.name"
                                 required
                                 class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8C00] focus:border-transparent"
                                 placeholder="Enter your full name">
@@ -250,7 +268,7 @@
                             
                         </div>
                     </div>
-
+<input type="hidden" name="slug" value="{{product.slug}}">
                     <!-- Submit Button -->
                     <button
                         type="submit"
@@ -271,11 +289,7 @@
                     class="pb-4 font-medium">
                 Description
             </button>
-            <button @click="activeTab = 'specifications'" 
-                    :class="{ 'border-b-2 border-primary text-primary': activeTab === 'specifications' }"
-                    class="pb-4 font-medium">
-                Specifications
-            </button>
+          
             <button @click="activeTab = 'reviews'" 
                     :class="{ 'border-b-2 border-primary text-primary': activeTab === 'reviews' }"
                     class="pb-4 font-medium">
@@ -287,39 +301,6 @@
         <div x-show="activeTab === 'description'" class="space-y-4">
             <div class="prose">
                 {{product.description|safe}}
-            </div>
-        </div>
-
-        <div x-show="activeTab === 'specifications'" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-2">
-                    <div class="flex justify-between py-2 border-b">
-                        <span class="text-gray-600">Brand</span>
-                        <span class="font-medium">Car One BD</span>
-                    </div>
-                    <div class="flex justify-between py-2 border-b">
-                        <span class="text-gray-600">Type</span>
-                        <span class="font-medium">Gel Based</span>
-                    </div>
-                    <div class="flex justify-between py-2 border-b">
-                        <span class="text-gray-600">Volume</span>
-                        <span class="font-medium">50ml</span>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <div class="flex justify-between py-2 border-b">
-                        <span class="text-gray-600">Duration</span>
-                        <span class="font-medium">60 Days</span>
-                    </div>
-                    <div class="flex justify-between py-2 border-b">
-                        <span class="text-gray-600">Package Contents</span>
-                        <span class="font-medium">1 Air Freshener</span>
-                    </div>
-                    <div class="flex justify-between py-2 border-b">
-                        <span class="text-gray-600">Warranty</span>
-                        <span class="font-medium">30 Days</span>
-                    </div>
-                </div>
             </div>
         </div>
 

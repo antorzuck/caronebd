@@ -3,7 +3,7 @@ from base.models import *
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth import login
 
 
 def check_coupon(request):
@@ -72,8 +72,8 @@ def checkout(request):
         shipping_cost = float(request.POST.get("total_shipping_to_pay", 0))
         total_price = float(request.POST.get("total_price_to_pay", 0))
 
-
         order = Order.objects.create(
+            user=request.user,
             full_name=full_name,
             phone_number=phone_number,
             email=email,
@@ -89,13 +89,13 @@ def checkout(request):
             products = CartItems.objects.filter(cart=get_cart)
 
             for p in products:
-                OrderItem.objects.create(order=order, product=p.product)
+                OrderItem.objects.create(order=order, product=p.product, quantity=p.quantity)
 
         if product_id:
             get_product = Product.objects.get(id=product_id)
             oic = OrderItem.objects.create(order=order, product=get_product)
 
-        return JsonResponse({"success": True, "order_id": order.id})
+        return redirect('/orders')
     return render(request, "checkout.html")
 
 
@@ -188,26 +188,6 @@ def add_to_cart(request):
 
 
 
-@csrf_exempt
-def update_cart_item(request, item_id):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        quantity = data.get('quantity')
-
-        # Fetch the cart item and update its quantity
-        cart_item = get_object_or_404(CartItem, id=item_id)
-        cart_item.quantity = quantity
-        cart_item.save()
-
-        # Recalculate the total price
-        cart = cart_item.cart
-        cart_total = sum(item.product.price * item.quantity for item in cart.cart_items.all())
-        cart.total_price = cart_total
-        cart.save()
-
-        return JsonResponse({'success': True, 'new_total_price': cart_total})
-
-
 
 def increase_quantity(request, product_id):
     cart = Cart.objects.get(user=request.user, is_paid=False)
@@ -243,3 +223,45 @@ def remove_item(request, product_id):
         cart.delete()
 
     return redirect('/cart')
+
+
+
+def orders(request):
+    orders = Order.objects.filter(user=request.user).prefetch_related("items__product").order_by('-id')
+    
+    context = {
+        "orders": orders,
+    }
+    return render(request, "orders.html", context)
+
+
+
+
+
+
+def register(request):
+    if request.method == 'POST':
+    
+        full_name = request.POST.get('full_name')
+        phone = request.POST.get('phone').strip()
+        address = request.POST.get('address')
+        password = request.POST.get('password').strip()
+        slug = request.POST.get('slug')
+
+        if User.objects.filter(username=phone).exists():
+            messages.error(request, "A user with this phone number already exists.")
+            return redirect(f'/product/{slug}')
+
+        
+        user = User.objects.create_user(username=phone, password=password, first_name=full_name)
+        user.save()
+
+    
+        Profile.objects.create(user=user, phone=phone, address=address, name=full_name)
+
+    
+        login(request, user)
+        messages.success(request, "Registration successful and logged in automatically.")
+        return redirect(f'/product/{slug}')
+
+    return redirect('/')

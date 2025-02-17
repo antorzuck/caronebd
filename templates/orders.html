@@ -1,5 +1,6 @@
 
 {% extends 'base.html' %}
+{% load custom_filters %}
 
 {% block css %}
         .bg-pattern {
@@ -26,28 +27,56 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
            
             <!-- Order Card 5 -->
+
+            {% for order in orders %}
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden order-card">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-semibold text-primary">Order #BD12349</h2>
-                        <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">Cancelled</span>
+                        <h2 class="text-2xl font-semibold text-primary">Order #{{order.id}}</h2>
+                        {% if order.order_status == "pending" %}
+    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+        {{ order.order_status|title }}
+    </span>
+{% elif order.order_status == "processing" %}
+    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+        {{ order.order_status|title }}
+    </span>
+{% elif order.order_status == "shipped" %}
+    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+        {{ order.order_status|title }}
+    </span>
+{% elif order.order_status == "delivered" %}
+    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+        {{ order.order_status|title }}
+    </span>
+{% elif order.order_status == "cancelled" %}
+    <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
+        {{ order.order_status|title }}
+    </span>
+{% endif %}
+
                     </div>
                     <div class="mb-4">
-                        <p class="text-gray-600">Ordered on: June 25, 2023</p>
-                        <p class="text-gray-600">Total: ৳2,199</p>
+                        <p class="text-gray-600">Ordered on: {{order.created_at|time_ago}}</p>
+                        <p class="text-gray-600">Total: ৳{{order.total_price}}</p>
                     </div>
+
+                    {% for item in order.items.all %}
+
                     <div class="flex items-center mb-4">
-                        <img src="https://via.placeholder.com/80" alt="Car Floor Mats" class="w-16 h-16 object-cover rounded-lg mr-4">
+                        <img src="{{item.product.featured_image.url}}" alt="Car Floor Mats" class="w-16 h-16 object-cover rounded-lg mr-4">
                         <div>
-                            <h3 class="font-semibold text-lg">Car Floor Mats</h3>
-                            <p class="text-gray-600">Quantity: 1</p>
+                            <h3 class="font-semibold text-lg">{{item.product.name}}</h3>
+                            <p class="text-gray-600">Quantity: {{item.quantity}}</p>
                         </div>
                     </div>
-                    <a href="order-info.html" class="block w-full bg-gray-300 text-gray-600 text-center font-semibold py-2 rounded-lg transition-colors duration-300 cursor-not-allowed">
-                        See Delivery Info
-                    </a>
+
+                    {% endfor %}
+
+                    
                 </div>
             </div>
+            {% endfor %}
         </div>
 
         <div class="mt-12 text-center">
