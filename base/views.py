@@ -4,6 +4,9 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login
+from django.db.models import Q
+from urllib.parse import unquote
+
 
 
 def check_coupon(request):
@@ -265,3 +268,42 @@ def register(request):
         return redirect(f'/product/{slug}')
 
     return redirect('/')
+
+
+
+
+def category_view(request, slug):
+  
+    category = get_object_or_404(Category, slug=slug)
+
+    subcats = category.child.all()
+
+    sort_by = request.GET.get('sort', 'name')
+    brands = request.GET.get('brands')
+    price = request.GET.get('price')
+
+   
+    products = Product.objects.filter(category__in=subcats, is_active=True)
+
+    print(products)
+    print(sort_by)
+    print(brands)
+
+    if brands:
+        brand_list = unquote(brands).split(',')
+        products = products.filter(brand__in=brand_list)
+
+    if price:
+        products = products.filter(price=price)
+
+   
+    if sort_by == 'name':
+        products = products.order_by('name')
+
+    
+    context = {
+        'products' : products
+    }
+
+    
+    return render(request, 'category.html', context)

@@ -1,88 +1,100 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
 {% block body %}
-    <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
+<h1 class="text-3xl font-bold mb-8">Your Cart</h1>
 
-    {% if messages %}
-        {% for m in messages %}
-        <div class="p-4 mb-4 text-sm rounded-lg text-yellow-900 bg-yellow-100" role="alert">
-            <span class="font-medium"></span> {{ m }}
-        </div>
-        {% endfor %}
-        {% endif %}
-        <form method="POST" action="/checkout">
-{% if request.user.is_authenticated %}
-            <input type="hidden" name="full_name" value="{{request.user.profile.name}}">
-            <input type="hidden" name="phone_number" value="{{request.user.profile.phone}}">
-            <input type="hidden" name="address" value="{{request.user.profile.address}}">
-            <input type="hidden" name="email" value="{{request.user.email}}">
+{% if messages %}
+{% for m in messages %}
+<div class="p-4 mb-4 text-sm rounded-lg text-yellow-900 bg-yellow-100" role="alert">
+    <span class="font-medium"></span> {{ m }}
+</div>
+{% endfor %}
 {% endif %}
-<input type="hidden" name="cart_id" value="{{cart.id}}">
-<input type="hidden" name="shipping_method" id="shipping_method" value="70">
-<input type="hidden" name="total_shipping_to_pay" id="total_shipping_to_pay" value="70">
-<input type="hidden" name="total_price_to_pay" id="total_price_to_pay" value="{{ total_price_to_pay }}">
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-    {% csrf_token %}
 
 
-        <div class="lg:col-span-2">
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                {% if cart_items %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                    {% for item in cart_items %}
-                        <div class="flex items-center py-6 border-b">
-                            <img src="{{ item.product.featured_image.url }}" alt="{{ item.product.name }}" class="w-24 h-24 object-cover rounded-md">
-                            <div class="ml-4 flex-1">
-                                <h2 class="text-lg font-semibold">{{ item.product.name }}</h2>
-                                <p class="text-gray-600">{{ item.description }}</p>
-                                <div class="mt-2 flex items-center justify-between">
-                                    <div class="flex items-center border rounded-md">
-                                        <a href="/cart/decrease/{{ item.id }}/" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-l-md">-</a>
-                                        <span class="px-3 py-1">{{ item.quantity }}</span>
-                                        <a href="/cart/increase/{{ item.id }}/" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-r-md">+</a>
-                                    </div>
-                                    <p class="font-semibold">৳{{ item.quantity|multiply:item.product.discount_price }}</p>
-                                </div>
-                            </div>
-                            <a href="/cart/remove/{{ item.id }}/" class="ml-4 text-red-500 hover:text-red-700">
-                                <i data-lucide="trash-2" class="w-5 h-5"></i>
-                            </a>
+
+
+
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            {% if cart_items %}
+
+            {% for item in cart_items %}
+            <div class="flex items-center py-6 border-b">
+                <img src="{{ item.product.featured_image.url }}" alt="{{ item.product.name }}"
+                    class="w-24 h-24 object-cover rounded-md">
+                <div class="ml-4 flex-1">
+                    <h2 class="text-lg font-semibold">{{ item.product.name }}</h2>
+                    <p class="text-gray-600">{{ item.description }}</p>
+                    <div class="mt-2 flex items-center justify-between">
+                        <div class="flex items-center border rounded-md">
+                            <a href="/cart/decrease/{{ item.id }}/"
+                                class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-l-md">-</a>
+                            <span class="px-3 py-1">{{ item.quantity }}</span>
+                            <a href="/cart/increase/{{ item.id }}/"
+                                class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-r-md">+</a>
                         </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="text-center py-8">
-                        <i data-lucide="shopping-cart" class="w-16 h-16 mx-auto text-gray-400 mb-4"></i>
-                        <p class="text-xl text-gray-600">Your cart is empty</p>
-                        <a href="#" class="mt-4 inline-block bg-[#FF8C00] text-white px-6 py-2 rounded-md hover:bg-[#FF8C00]/90">Start Shopping</a>
+                        <p class="font-semibold">৳{{ item.quantity|multiply:item.product.discount_price }}</p>
                     </div>
-                {% endif %}
+                </div>
+                <a href="/cart/remove/{{ item.id }}/" class="ml-4 text-red-500 hover:text-red-700">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </a>
             </div>
+            {% endfor %}
+            {% else %}
+            <div class="text-center py-8">
+                <i data-lucide="shopping-cart" class="w-16 h-16 mx-auto text-gray-400 mb-4"></i>
+                <p class="text-xl text-gray-600">Your cart is empty</p>
+                <a href="#"
+                    class="mt-4 inline-block bg-[#FF8C00] text-white px-6 py-2 rounded-md hover:bg-[#FF8C00]/90">Start
+                    Shopping</a>
+            </div>
+            {% endif %}
         </div>
+    </div>
 
-        <div class="lg:col-span-1">
+    <div class="lg:col-span-1">
 
-            
-            <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
-                <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-                {% if cart_items %}
 
-                <form action="" method="post">
-                    {% csrf_token %}
+        <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
+            <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+            {% if cart_items %}
+
+            <form action="/cart" method="post">
+                {% csrf_token %}
                 <div class="mb-6">
                     <div class="flex gap-2">
-                        
+
                         <input type="text" name="code" placeholder="Enter coupon code"
-                               class="flex-1 border rounded-l-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">
-                        <button type="submit" id="applyCoupon" class="bg-[#FF8C00] text-black px-4 py-2 rounded-r-md hover:bg-[#FF8C00]/90">
+                            class="flex-1 border rounded-l-md px-3 py-2 focus:outline-none focus:border-[#FF8C00]">
+                        <button type="submit" id="applyCoupon"
+                            class="bg-[#FF8C00] text-black px-4 py-2 rounded-r-md hover:bg-[#FF8C00]/90">
                             Apply
                         </button>
-                    
+
                     </div>
                     <div id="couponMessage" class="mt-2 text-sm"></div>
                 </div>
-                </form>
+            </form>
+
+
+            <form method="POST" action="/checkout">
+                {% csrf_token %}
+                {% if request.user.is_authenticated %}
+                <input type="hidden" name="full_name" value="{{request.user.profile.name}}">
+                <input type="hidden" name="phone_number" value="{{request.user.profile.phone}}">
+                <input type="hidden" name="address" value="{{request.user.profile.address}}">
+                <input type="hidden" name="email" value="{{request.user.email}}">
+                {% endif %}
+                <input type="hidden" name="cart_id" value="{{cart.id}}">
+                <input type="hidden" name="shipping_method" id="shipping_method" value="70">
+                <input type="hidden" name="total_shipping_to_pay" id="total_shipping_to_pay" value="70">
+                <input type="hidden" name="total_price_to_pay" id="total_price_to_pay" value="{{ total_price_to_pay }}">
+
+                <input type="hidden" name="total_discount_amount" value="{{coupon_discount}}">
 
 
                 <div class="space-y-2 text-sm border-b pb-4 mb-4">
@@ -95,7 +107,7 @@
                         <select id="shipping-method" class="border p-1 rounded">
                             <option value="dhaka">Inside Dhaka - ৳70.00</option>
                             <option value="outside">Outside Dhaka - ৳120.00</option>
-                    
+
                         </select>
                         <span id="shipping-price">৳70.00</span>
                     </div>
@@ -108,20 +120,22 @@
                     <span>Total</span>
                     <span id="total-price">৳{{ total_price_to_pay }}</span>
                 </div>
-                
-                    <button type="submit" class="w-full mt-6 block bg-[#FF8C00] text-white py-3 text-center rounded-md hover:bg-[#FF8C00]/90 transition-colors">
-                        Submit Order
-                    </button>
+
+                <button type="submit"
+                    class="w-full mt-6 block bg-[#FF8C00] text-white py-3 text-center rounded-md hover:bg-[#FF8C00]/90 transition-colors">
+                    Submit Order
+                </button>
                 {% else %}
-                    <p class="text-center text-gray-600">No items in cart</p>
+                <p class="text-center text-gray-600">No items in cart</p>
                 {% endif %}
-            </div>
         </div>
-
-
+    </form>
     </div>
 
-</form>
+
+</div>
+
+
 <script>
     const shippingMethodSelect = document.getElementById('shipping-method');
     const shippingPriceSpan = document.getElementById('shipping-price');
@@ -158,9 +172,9 @@
 
     shippingMethodSelect.addEventListener('change', updateTotalPrice);
 
-    // Initial update when the page loads
+
     updateTotalPrice();
 </script>
 
-    
+
 {% endblock %}

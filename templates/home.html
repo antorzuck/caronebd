@@ -53,7 +53,7 @@
 
             <div x-show="open" class="mt-3 pl-13">
                 {% for subcategory in category.child.all %}
-                <a href="{{ subcategory.slug }}" class="block ml-5 text-gray-600">{{ subcategory.name }}</a>
+                <a href="/{{ subcategory.slug }}" class="block ml-5 text-gray-600">{{ subcategory.name }}</a>
                 {% endfor %}
         
             </div>
@@ -93,7 +93,7 @@
             
                
             {% for f in flashs%}
-            <a href="/product/{{f.slug}}">
+            <a href="/product/{{f.product.slug}}">
                 <div class="flex-none w-36 md:w-64">
                     <div class="bg-white rounded-lg overflow-hidden shadow-lg">
                         <img src="{{f.product.featured_image.url}}" alt="{{f.product.name}}" class="w-full h-36 md:h-52 object-cover">
@@ -132,36 +132,17 @@
     <div class="lg:hidden px-4 mt-8 mb-6">
         <h2 class="text-gray-800 text-md font-bold mb-4">TOP CATEGORIES</h2>
         <div class="flex overflow-x-auto gap-4 pb-4">
+
+            {% for category in categories %}
+            <a href="/{{category.slug}}">
             <div class="flex-none text-center w-20">
-                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
+                <img src="{{category.thumbnail.url}}" 
                      class="w-20 h-20 rounded-full mb-2" alt="Interior">
-                <p class="text-sm font-medium">Interior</p>
+                <p class="text-sm font-medium">{{category.name}}</p>
             </div>
-            <div class="flex-none text-center w-20">
-                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
-                     class="w-20 h-20 rounded-full mb-2" alt="Exterior">
-                <p class="text-sm font-medium">Exterior</p>
-            </div>
-            <div class="flex-none text-center w-20">
-                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
-                     class="w-20 h-20 rounded-full mb-2" alt="Electrical">
-                <p class="text-sm font-medium">Electrical</p>
-            </div>
-            <div class="flex-none text-center w-20">
-                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
-                     class="w-20 h-20 rounded-full mb-2" alt="Engine">
-                <p class="text-sm font-medium">Engine</p>
-            </div>
-            <div class="flex-none text-center w-20">
-                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
-                     class="w-20 h-20 rounded-full mb-2" alt="Wheels">
-                <p class="text-sm font-medium">Wheels</p>
-            </div>
-            <div class="flex-none text-center w-20">
-                <img src="https://orenmart.sgp1.digitaloceanspaces.com/category/f0fea668-d4e9-43a8-b27c-7eecc85bd40e.jpg" 
-                     class="w-20 h-20 rounded-full mb-2" alt="Accessories">
-                <p class="text-sm font-medium">Accessories</p>
-            </div>
+        </a>
+            {% endfor %}
+            
         </div>
     </div>
 
