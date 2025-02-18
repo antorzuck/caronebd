@@ -43,3 +43,14 @@ def time_ago(value):
     else:
         years = int(delta.total_seconds() / 31536000)
         return f"{years} year{'s' if years > 1 else ''} ago"
+
+
+
+@register.filter
+def discount_percentage(original_price, discount_price):
+    try:
+        # Calculate the discount percentage
+        discount = ((original_price - discount_price) / original_price) * 100
+        return round(discount, 2)  # Round to 2 decimal places
+    except ZeroDivisionError:
+        return 0  # In case the original price is zero

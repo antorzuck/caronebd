@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.models import User
+from django.db.models import Avg
 
 
 class BaseModel(models.Model):
@@ -57,6 +58,20 @@ class SubCategory(BaseModel):
         return self.name
 
 
+class Brand(BaseModel):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField()
+    thumbnail = models.FileField(upload_to='brands')
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
 
 
 class Product(BaseModel):
@@ -67,7 +82,7 @@ class Product(BaseModel):
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     stock = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products')
-    brand = models.CharField(max_length=255, blank=True, null=True)
+    brand = models.ForeignKey(Brand, blank=True, null=True, on_delete=models.SET_NULL)
     is_active = models.BooleanField(default=True)
     rating = models.FloatField(default=0.0)
     num_reviews = models.PositiveIntegerField(default=0)
@@ -95,7 +110,6 @@ class Product(BaseModel):
         self.rating = avg_rating
         self.num_reviews = num_reviews
         self.save()
-
 
 
 

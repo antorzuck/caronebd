@@ -27,10 +27,13 @@ def home(r):
 
     products = Product.objects.filter(is_active=True).order_by('-id')[:15]
 
+    brands = Brand.objects.all().order_by('?')[:15]
+
     context = {
         'banners' : banners,
         'products' : products,
-        'flashs' : flash
+        'flashs' : flash,
+        'brands' : brands
     }
     return render(r, 'home.html', context)
 
@@ -39,8 +42,12 @@ def product_view(r, slug):
     try:
         get_product = Product.objects.get(slug=slug)
 
+
+        rvw = Review.objects.filter(product=get_product)
+
         context = {
-            'product' : get_product
+            'product' : get_product,
+            'rvw' : rvw
         }
     except:
         return redirect('/')
@@ -278,7 +285,7 @@ def category_view(request, slug):
 
     subcats = category.child.all()
 
-    sort_by = request.GET.get('sort', 'name')
+    sort_by = request.GET.get('sort', '-id')
     brands = request.GET.get('brands')
     price = request.GET.get('price')
 
@@ -294,15 +301,69 @@ def category_view(request, slug):
         products = products.filter(brand__in=brand_list)
 
     if price:
-        products = products.filter(price=price)
+        products = products.filter(price__lte=price)
 
    
-    if sort_by == 'name':
-        products = products.order_by('name')
+    if sort_by == '-id':
+        products = products.order_by('-id')
+
+    if sort_by == 'price-low':
+        products = products.order_by('discount_price')
+    
+    if sort_by == 'price-high':
+        products = products.order_by('-discount_price')
+
 
     
     context = {
-        'products' : products
+        'products' : products,
+        'category' : category
+    }
+
+    
+    return render(request, 'category.html', context)
+
+
+
+
+
+def sub_category_view(request, slug):
+  
+    category = get_object_or_404(SubCategory, slug=slug)
+
+    sort_by = request.GET.get('sort', '-id')
+    brands = request.GET.get('brands')
+    price = request.GET.get('price')
+
+   
+    products = Product.objects.filter(category=category, is_active=True)
+
+    print(products)
+    print(sort_by)
+    print(brands)
+
+    if brands:
+        brand_list = unquote(brands).split(',')
+        products = products.filter(brand__in=brand_list)
+
+    if price:
+        products = products.filter(price__lte=price)
+
+   
+    if sort_by == '-id':
+        products = products.order_by('-id')
+
+    if sort_by == 'price-low':
+        products = products.order_by('discount_price')
+    
+    if sort_by == 'price-high':
+        products = products.order_by('-discount_price')
+
+
+    
+    context = {
+        'products' : products,
+        'category' : category
     }
 
     

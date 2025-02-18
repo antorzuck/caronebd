@@ -53,7 +53,7 @@
 
             <div x-show="open" class="mt-3 pl-13">
                 {% for subcategory in category.child.all %}
-                <a href="/{{ subcategory.slug }}" class="block ml-5 text-gray-600">{{ subcategory.name }}</a>
+                <a href="/subcategory/{{ subcategory.slug }}" class="block ml-5 text-gray-600">{{ subcategory.name }}</a>
                 {% endfor %}
         
             </div>
@@ -129,12 +129,12 @@
 
 
     <!-- Top Categories -->
-    <div class="lg:hidden px-4 mt-8 mb-6">
+    <div class="lg:hidden mt-8 mb-6">
         <h2 class="text-gray-800 text-md font-bold mb-4">TOP CATEGORIES</h2>
         <div class="flex overflow-x-auto gap-4 pb-4">
 
             {% for category in categories %}
-            <a href="/{{category.slug}}">
+            <a href="/category/{{category.slug}}">
             <div class="flex-none text-center w-20">
                 <img src="{{category.thumbnail.url}}" 
                      class="w-20 h-20 rounded-full mb-2" alt="Interior">
@@ -150,7 +150,8 @@
 
 
 <!-- Product Slider Section -->
-<div class="px-4 py-6">
+
+<div class=" py-6">
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-lg font-bold">TRENDING PRODUCTS</h2>
         <a href="#" class="text-white bg-primary px-4 py-1 rounded text-sm">View all</a>
@@ -193,6 +194,86 @@
         </button>
     </div>
 </div>
+
+
+
+
+
+
+<div class=" py-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold">POPULAR BRANDS</h2>
+        <a href="#" class="text-white bg-primary px-4 py-1 rounded text-sm">View all</a>
+    </div>
+
+    <div x-data="productSlider()" class="relative">
+        <!-- Previous Button -->
+        <button @click="scrollLeft" 
+                class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md"
+                x-show="canScrollLeft"
+                x-cloak>
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Product Container -->
+        <div class="overflow-x-auto hide-scrollbar" x-ref="container">
+            <div class="flex gap-4">
+            {% for brand in brands %}
+            <a href="/brands/{{brand.slug}}">
+                <div class="flex-none w-36 md:w-64">
+                    <div class="bg-white rounded-lg overflow-hidden">
+                        <img src="{{brand.thumbnail.url}}" alt="Denso Cool Gear Cabin Filter" class="w-full h-36 md:h-52 object-cover">
+            
+                    </div>
+                </div>
+            </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Next Button -->
+        <button @click="scrollRight" 
+                class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md"
+                x-show="canScrollRight"
+                x-cloak>
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+        </button>
+    </div>
+</div>
+
+
+
+
+
+
+<div class=" py-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold">YOU MAY LIKE</h2>
+        <a href="#" class="text-white bg-primary px-4 py-1 rounded text-sm">View all</a>
+    </div>
+
+
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    {% for product in products %}
+    <a href="/product/{{product.slug}}">
+        <div class="flex-none w-36 md:w-64">
+            <div class="bg-white rounded-lg overflow-hidden">
+                <img src="{{product.featured_image.url}}" alt="Denso Cool Gear Cabin Filter" class="w-full h-36 md:h-52 object-cover">
+                <div class="p-2">
+                    <h3 class="text-sm font-medium line-clamp-2 mb-1">{{product.name}}</h3>
+                    <p class="text-primary font-bold">৳{{product.price}}</p>
+                </div>
+            </div>
+        </div>
+    </a>
+        {% endfor %}
+
+</div>
+
+
+</div>
+
+
 
 
 

@@ -111,16 +111,7 @@
         </div>
     </header>
 
-    <!-- Mobile Categories Scroll -->
-    <div class="flex overflow-x-auto whitespace-nowrap py-3 px-4 gap-5 bg-white text-gray-600 hidden">
-        <span class="text-sm font-medium">Interior</span>
-        <span class="text-sm font-medium">Exterior</span>
-        <span class="text-sm font-medium">Electronics & Gadgets</span>
-        <span class="text-sm font-medium">Care</span>
-        <span class="text-sm font-medium">Performance</span>
-        <span class="text-sm font-medium">Perfumes</span>
-        <span class="text-sm font-medium">Stickers</span>
-    </div>
+ 
 
 
 
@@ -151,7 +142,7 @@
                          style="top: 100%; left: var(--dropdown-left);"
                          x-cloak>
                          {% for subcategory in category.child.all %}
-                        <a href="{{ subcategory.slug }}" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">{{ subcategory.name }}</a>
+                        <a href="/subcategory/{{ subcategory.slug }}" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">{{ subcategory.name }}</a>
                         {% endfor %}
                     </div>
                 </div>
@@ -203,7 +194,7 @@
              class="absolute bottom-full right-0 mb-4 space-y-2 min-w-[160px]">
             
             <!-- Messenger -->
-            <a href="https://m.me/YourMessengerID" 
+            <a href="{{site_info.fb_chat}}" 
                target="_blank"
                class="flex items-center gap-3 bg-white text-[#0084FF] p-3 rounded-lg shadow-lg hover:bg-gray-50 transition-colors w-full">
                 <i data-lucide="message-circle" class="w-5 h-5"></i>
@@ -211,7 +202,7 @@
             </a>
 
             <!-- WhatsApp -->
-            <a href="https://wa.me/YourWhatsAppNumber" 
+            <a href="{{site_info.w_chat}}" 
                target="_blank"
                class="flex items-center gap-3 bg-white text-[#25D366] p-3 rounded-lg shadow-lg hover:bg-gray-50 transition-colors w-full">
                 <i data-lucide="message-circle" class="w-5 h-5"></i>
@@ -219,7 +210,7 @@
             </a>
 
             <!-- Telegram -->
-            <a href="https://t.me/YourTelegramUsername" 
+            <a href="https://t.me/hayderkha" 
                target="_blank"
                class="flex items-center gap-3 bg-white text-[#0088cc] p-3 rounded-lg shadow-lg hover:bg-gray-50 transition-colors w-full">
                 <i data-lucide="send" class="w-5 h-5"></i>
@@ -401,7 +392,7 @@
                         </button>
                         <div x-show="open" class="pl-12 py-2 space-y-2">
                             {% for subcategory in category.child.all %}
-                            <a href="{{ subcategory.slug }}" class="block ml-3">{{ subcategory.name }}</a>
+                            <a href="/subcategory/{{ subcategory.slug }}" class="block ml-3">{{ subcategory.name }}</a>
                             {% endfor %}
                         </div>
                     </div>

@@ -108,7 +108,7 @@
 
         <main class="container mx-auto px-4 py-8">
             <div class="flex items-center justify-between mb-6">
-                <h1 class="text-2xl font-bold">Interior</h1>
+                <h1 class="text-2xl font-bold">{{category.name}}</h1>
                 <button @click="showFilters = true" 
                         class="lg:hidden flex items-center gap-2">
                     <i data-lucide="sliders" class="w-5 h-5"></i>
@@ -139,18 +139,15 @@
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h2 class="text-lg font-semibold mb-4">Filter By Brand</h2>
                         <div class="space-y-3">
+
+                            {% for brand in all_brands %}
                             <label class="flex items-center">
-                                <input type="checkbox" name="brand" value="mi" onchange="handleBrandChange(this)">
-                                <span class="ml-2">MI</span>
+                                <input type="checkbox" name="brand" value="{{brand.id}}" onchange="handleBrandChange(this)">
+                                <span class="ml-2">{{brand.name}}</span>
                             </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="brand" value="toyota" onchange="handleBrandChange(this)">
-                                <span class="ml-2">Toyota</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="brand" value="trd" onchange="handleBrandChange(this)">
-                                <span class="ml-2">TRD</span>
-                            </label>
+                            {% endfor %}
+                           
+                            
                         </div>
                     </div>
                 </aside>
@@ -166,53 +163,22 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Product Card 1 -->
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden product-card">
-                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-17%2022-21-30-sYvzSpDfN5LvqI8WM5o92pQmHIr6Hg.png" alt="Car Best Under Seat Cushion" class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-lg mb-2">Car Best Under Seat Cushion</h3>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[#FF8C00] font-bold">৳2250</span>
-                                    <span class="text-sm text-gray-600">MI</span>
-                                </div>
-                            </div>
-                        </div>
+                       <!-- Product Card 4 -->
 
-                        <!-- Product Card 2 -->
+                       {% for product in products %}
+                       <a href="/product/{{product.slug}}">
                         <div class="bg-white rounded-lg shadow-sm overflow-hidden product-card">
-                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-17%2022-21-30-sYvzSpDfN5LvqI8WM5o92pQmHIr6Hg.png" alt="Luxury Car Seat Belt Clips" class="w-full h-48 object-cover">
+                            <img src="{{product.featured_image.url}}" alt="{{product.name}}" class="w-full h-48 object-cover">
                             <div class="p-4">
-                                <h3 class="font-semibold text-lg mb-2">Luxury Car Seat Belt Clips</h3>
+                                <h3 class="font-semibold text-lg mb-2">{{product.name}}</h3>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-[#FF8C00] font-bold">৳950</span>
-                                    <span class="text-sm text-gray-600">Toyota</span>
+                                    <span class="text-[#FF8C00] font-bold">৳{{product.discount_price}}</span>
+                                    <span class="text-sm text-gray-600">{{product.stock}}</span>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Product Card 3 -->
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden product-card">
-                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-17%2022-21-30-sYvzSpDfN5LvqI8WM5o92pQmHIr6Hg.png" alt="Toyota Car Ashtray Holder" class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-lg mb-2">Toyota Car Ashtray Holder with LED</h3>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[#FF8C00] font-bold">৳950</span>
-                                    <span class="text-sm text-gray-600">Toyota</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Card 4 -->
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden product-card">
-                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-17%2022-21-30-sYvzSpDfN5LvqI8WM5o92pQmHIr6Hg.png" alt="Universal TRD Steering Wheel" class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-lg mb-2">Universal TRD Steering Wheel</h3>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[#FF8C00] font-bold">৳990</span>
-                                    <span class="text-sm text-gray-600">TRD</span>
-                                </div>
-                            </div>
-                        </div>
+                    </a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -236,10 +202,9 @@
             </div>
         </nav>
     </div>
-
     <script>
-        // Function to update URL parameters without reloading the page
-        function updateURLParameter(key, value) {
+        // Function to update URL parameters and reload the page
+        function updateURLParameterAndReload(key, value) {
             const url = new URL(window.location.href);
             if (value) {
                 url.searchParams.set(key, value);
@@ -247,45 +212,31 @@
                 url.searchParams.delete(key);
             }
             window.history.pushState({}, '', url);
+            window.location.reload(); // Reload the page after updating the URL
         }
-
+    
         // Handle price change
         function handlePriceChange(value) {
-            updateURLParameter('price', value);
-            filterProducts();
+            updateURLParameterAndReload('price', value);
         }
-
+    
         // Handle brand change
-        function handleBrandChange(checkbox) {
+        function handleBrandChange() {
             const checkedBrands = Array.from(document.querySelectorAll('input[name="brand"]:checked'))
                 .map(input => input.value);
-            updateURLParameter('brands', checkedBrands.join(','));
-            filterProducts();
+    
+            if (checkedBrands.length > 0) {
+                updateURLParameterAndReload('brands', checkedBrands.join(','));
+            } else {
+                updateURLParameterAndReload('brands', ''); // If no brand is selected, clear the parameter
+            }
         }
-
+    
         // Handle sort change
         function handleSort(value) {
-            updateURLParameter('sort', value);
-            filterProducts();
+            updateURLParameterAndReload('sort', value);
         }
-
-        // Function to filter products based on current URL parameters
-        function filterProducts() {
-            const params = new URLSearchParams(window.location.search);
-            const price = params.get('price');
-            const brands = params.get('brands') ? params.get('brands').split(',') : [];
-            const sort = params.get('sort');
-
-            // Here you would typically filter the products based on these parameters
-            // For this example, we'll just log the current filter state
-            console.log('Filtering products:');
-            console.log('Price:', price);
-            console.log('Brands:', brands);
-            console.log('Sort:', sort);
-
-            // You can add your filtering logic here
-        }
-
+    
         // Initialize filters from URL params
         document.addEventListener('DOMContentLoaded', function() {
             const params = new URLSearchParams(window.location.search);
@@ -295,7 +246,7 @@
                 document.getElementById('desktop-price').value = params.get('price');
                 document.getElementById('mobile-price').value = params.get('price');
             }
-
+    
             // Set brand checkboxes
             if (params.has('brands')) {
                 const brands = params.get('brands').split(',');
@@ -303,17 +254,13 @@
                     input.checked = brands.includes(input.value);
                 });
             }
-
+    
             // Set sort select
             if (params.has('sort')) {
                 document.querySelector('select').value = params.get('sort');
             }
-
-            // Initial filter
-            filterProducts();
         });
-
     </script>
-</div>
+       </div>
 
 {% endblock %}

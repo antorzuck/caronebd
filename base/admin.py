@@ -2,14 +2,14 @@ from django.contrib import admin
 from .models import *
 
 admin.site.register(Profile)
-
+admin.site.register(Brand)
 admin.site.register(Banner)
 admin.site.register(FlushSell)
 admin.site.register(OrderItem)
 
 admin.site.register(Cart)
 admin.site.register(CartItems)
-
+admin.site.register(Review)
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'full_name', 'phone_number', 'shipping_method', 'total_price')

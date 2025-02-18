@@ -1,4 +1,4 @@
-from .models import Category, SiteInfo, Cart, CartItems
+from .models import Category, SiteInfo, Cart, CartItems, Brand
 from django.core.cache import cache
 
 
@@ -33,3 +33,9 @@ def cart_item_count(request):
             cart_count = 0
 
     return {'cart_count': cart_count}
+
+
+
+def get_brands(request):
+    brands = Brand.objects.all().order_by('-id')
+    return {'all_brands': brands}

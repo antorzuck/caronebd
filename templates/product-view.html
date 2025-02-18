@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load custom_filters %}
 {% block css %}
 <style>
     [x-cloak] { display: none !important; }
@@ -48,7 +48,7 @@
                 <div class="flex items-center gap-4 mb-4">
                     <span class="text-3xl font-bold text-primary">৳{{product.discount_price}}</span>
                     <span class="text-lg text-gray-500 line-through">৳{{product.price}}</span>
-                    <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-sm font-medium">20% OFF</span>
+                    <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-sm font-medium">{{ product.price|discount_percentage:product.discount_price }}% OFF</span>
                 </div>
                 <!-- Rating -->
                 <div class="flex items-center gap-2">
@@ -59,7 +59,7 @@
                         <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
                         <i data-lucide="star-half" class="w-5 h-5 text-yellow-400"></i>
                     </div>
-                    <span class="text-gray-600">({{product.rating}}/5)</span>
+                    <span class="text-gray-600">({{product.rating|floatformat:1}}/5)</span>
                     <span class="text-gray-600">{{product.num_reviews}} Reviews</span>
                 </div>
             </div>
@@ -308,15 +308,41 @@
             <!-- Review Summary -->
             <div class="flex items-center gap-8">
                 <div class="text-center">
-                    <div class="text-5xl font-bold text-primary mb-2">4.5</div>
-                    <div class="flex items-center justify-center">
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star-half" class="w-5 h-5 text-yellow-400"></i>
-                    </div>
-                    <p class="text-gray-600 mt-1">Based on 128 reviews</p>
+                    <div class="text-5xl font-bold text-primary mb-2">{{ product.rating|floatformat:1 }}</div>
+<div class="flex items-center justify-center">
+    {% if product.rating >= 1 %}
+        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+    {% else %}
+        <i data-lucide="star" class="w-5 h-5 text-gray-300"></i>
+    {% endif %}
+    
+    {% if product.rating >= 2 %}
+        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+    {% else %}
+        <i data-lucide="star" class="w-5 h-5 text-gray-300"></i>
+    {% endif %}
+    
+    {% if product.rating >= 3 %}
+        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+    {% else %}
+        <i data-lucide="star" class="w-5 h-5 text-gray-300"></i>
+    {% endif %}
+    
+    {% if product.rating >= 4 %}
+        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+    {% else %}
+        <i data-lucide="star" class="w-5 h-5 text-gray-300"></i>
+    {% endif %}
+    
+    {% if product.rating >= 5 %}
+        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+    {% else %}
+        <i data-lucide="star" class="w-5 h-5 text-gray-300"></i>
+    {% endif %}
+</div>
+
+
+                    <p class="text-gray-600 mt-1">Based on {{product.num_reviews}} reviews</p>
                 </div>
                 <div class="flex-1 space-y-2">
                     <div class="flex items-center gap-2">
@@ -359,55 +385,62 @@
 
             <!-- Review List -->
             <div class="space-y-6">
+
+
+                {% for r in rvw %}
                 <!-- Review Item -->
                 <div class="border-b pb-6">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                            <i data-lucide="user" class="w-6 h-6 text-gray-500"></i>
+                           
+                            <img src="https://api.dicebear.com/9.x/adventurer/svg?seed={{r.user.first_name}}" alt="">
                         </div>
                         <div>
-                            <h4 class="font-medium">John Doe</h4>
+                            <h4 class="font-medium">{{r.user.first_name}}</h4>
                             <div class="flex items-center gap-2">
                                 <div class="flex">
+                                    {% if r.rating == 1 %}
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    {% elif r.rating == 2 %}
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    {% elif r.rating == 3 %}
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    {% elif r.rating == 4 %}
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                                    {% else %}
                                     <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
                                     <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
                                     <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
                                     <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
                                     <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                                    {% endif %}
                                 </div>
-                                <span class="text-sm text-gray-500">2 days ago</span>
+                                <span class="text-sm text-gray-500">{{r.created_at|time_ago}}</span>
                             </div>
                         </div>
                     </div>
                     <p class="text-gray-600">
-                        Great product! The fragrance is long-lasting and not overwhelming. I've been using it for a month now and still going strong. Highly recommended!
+                        {{r.review_text}}
                     </p>
                 </div>
-
-                <!-- More Review Items -->
-                <div class="border-b pb-6">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                            <i data-lucide="user" class="w-6 h-6 text-gray-500"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-medium">Jane Smith</h4>
-                            <div class="flex items-center gap-2">
-                                <div class="flex">
-                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
-                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
-                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
-                                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
-                                    <i data-lucide="star" class="w-4 h-4 text-gray-300"></i>
-                                </div>
-                                <span class="text-sm text-gray-500">1 week ago</span>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-gray-600">
-                        Nice fragrance but could last a bit longer. Overall satisfied with the purchase and the quick delivery.
-                    </p>
-                </div>
+{% endfor %}
+                
             </div>
         </div>
     </div>
