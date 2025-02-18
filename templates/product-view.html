@@ -345,41 +345,17 @@
                     <p class="text-gray-600 mt-1">Based on {{product.num_reviews}} reviews</p>
                 </div>
                 <div class="flex-1 space-y-2">
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm text-gray-600">5</span>
-                        <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div class="w-[70%] h-full bg-yellow-400"></div>
+                    {% for rating in "54321" %}
+                        {% with percentage=rating_percentages|dict_get:rating %}
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-600">{{ rating }}</span>
+                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-yellow-400" style="width: {{ percentage }}%;"></div>
+                            </div>
+                            <span class="text-sm text-gray-600">{{ percentage }}%</span>
                         </div>
-                        <span class="text-sm text-gray-600">70%</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm text-gray-600">4</span>
-                        <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div class="w-[20%] h-full bg-yellow-400"></div>
-                        </div>
-                        <span class="text-sm text-gray-600">20%</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm text-gray-600">3</span>
-                        <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div class="w-[5%] h-full bg-yellow-400"></div>
-                        </div>
-                        <span class="text-sm text-gray-600">5%</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm text-gray-600">2</span>
-                        <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div class="w-[3%] h-full bg-yellow-400"></div>
-                        </div>
-                        <span class="text-sm text-gray-600">3%</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm text-gray-600">1</span>
-                        <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div class="w-[2%] h-full bg-yellow-400"></div>
-                        </div>
-                        <span class="text-sm text-gray-600">2%</span>
-                    </div>
+                        {% endwith %}
+                    {% endfor %}
                 </div>
             </div>
 

@@ -6,42 +6,26 @@
             background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
+            border-radius: 10px;
         }
 {% endblock %}
     
 </head>
 
-{% body block %}
+{% block body %}
     <div class="min-h-screen">
         <!-- Header -->
-        <header class="bg-white shadow">
-            <div class="container mx-auto px-4 py-6">
-                <nav class="flex justify-between items-center">
-                    <a href="/" class="text-2xl font-bold text-[#FF8C00]">Car One BD</a>
-                    <div class="flex items-center space-x-4">
-                        <a href="#" class="text-gray-600 hover:text-[#FF8C00]">
-                            <i data-lucide="shopping-cart" class="w-6 h-6"></i>
-                        </a>
-                        <a href="#" class="text-gray-600 hover:text-[#FF8C00]">
-                            <i data-lucide="bell" class="w-6 h-6"></i>
-                        </a>
-                        <a href="#" class="text-[#FF8C00]">
-                            <i data-lucide="user" class="w-6 h-6"></i>
-                        </a>
-                    </div>
-                </nav>
-            </div>
-        </header>
+        
 
         <!-- Profile Header -->
         <div class="profile-bg h-64 relative">
-            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+            <div class="absolute inset-0  bg-opacity-50"></div>
             <div class="container mx-auto px-4 h-full flex items-end">
                 <div class="relative -bottom-16 flex items-end">
-                    <img src="https://api.dicebear.com/6.x/initials/svg?seed=John%20Doe&backgroundColor=ff8c00&textColor=ffffff" alt="John Doe" class="w-32 h-32 rounded-full border-4 border-white shadow-lg">
+                    <img src="https://api.dicebear.com/6.x/adventurer/svg?seed={{request.user.first_name}}&backgroundColor=ff8c00&textColor=ffffff" alt="John Doe" class="w-32 h-32 rounded-full border-4 border-white shadow-lg">
                     <div class="ml-6 mb-6">
-                        <h1 class="text-3xl font-bold text-[#FF8C00]">John Doe</h1>
-                        <p class="text-gray-700">Dhaka, Bangladesh</p>
+                        <h1 class="text-3xl font-bold text-[#FF8C00]">{{request.user.first_name}}</h1>
+                        <p class="text-gray-700">{{request.user.profile.address}}</p>
                     </div>
                 </div>
             </div>
@@ -52,24 +36,21 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Left Column - User Info -->
                 <div class="md:col-span-1 space-y-6">
+                    
                     <div class="bg-white rounded-lg shadow p-6">
-                        <h2 class="text-xl font-semibold mb-4">About Me</h2>
-                        <p class="text-gray-600">Car enthusiast and proud owner of a Toyota Camry. Always looking for ways to improve my ride!</p>
-                    </div>
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h2 class="text-xl font-semibold mb-4">Contact Information</h2>
+                        <h2 class="text-xl font-semibold mb-4">Information</h2>
                         <ul class="space-y-2">
                             <li class="flex items-center">
                                 <i data-lucide="mail" class="w-5 h-5 text-gray-400 mr-2"></i>
-                                <span>john.doe@example.com</span>
+                                <span>{{request.user.profile.email}}</span>
                             </li>
                             <li class="flex items-center">
                                 <i data-lucide="phone" class="w-5 h-5 text-gray-400 mr-2"></i>
-                                <span>+880 1234 567890</span>
+                                <span>{{request.user.profile.phone}}</span>
                             </li>
                             <li class="flex items-center">
                                 <i data-lucide="map-pin" class="w-5 h-5 text-gray-400 mr-2"></i>
-                                <span>Dhaka, Bangladesh</span>
+                                <span>{{request.user.profile.address}}</span>
                             </li>
                         </ul>
                     </div>
@@ -80,19 +61,19 @@
                     <!-- User Stats -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div class="bg-white rounded-lg shadow p-4 text-center">
-                            <div class="text-3xl font-bold text-[#FF8C00]">12</div>
+                            <div class="text-3xl font-bold text-[#FF8C00]">{{orders}}</div>
                             <div class="text-sm text-gray-600">Orders</div>
                         </div>
                         <div class="bg-white rounded-lg shadow p-4 text-center">
-                            <div class="text-3xl font-bold text-[#FF8C00]">8</div>
+                            <div class="text-3xl font-bold text-[#FF8C00]">{{rvws}}</div>
                             <div class="text-sm text-gray-600">Reviews</div>
                         </div>
                         <div class="bg-white rounded-lg shadow p-4 text-center">
-                            <div class="text-3xl font-bold text-[#FF8C00]">3</div>
+                            <div class="text-3xl font-bold text-[#FF8C00]">0</div>
                             <div class="text-sm text-gray-600">Wishlists</div>
                         </div>
                         <div class="bg-white rounded-lg shadow p-4 text-center">
-                            <div class="text-3xl font-bold text-[#FF8C00]">5,000</div>
+                            <div class="text-3xl font-bold text-[#FF8C00]">00</div>
                             <div class="text-sm text-gray-600">Reward Points</div>
                         </div>
                     </div>
@@ -101,38 +82,11 @@
                     <div class="bg-white rounded-lg shadow p-6">
                         <h2 class="text-xl font-semibold mb-4">Recent Orders</h2>
                         <div class="space-y-4">
-                            <div class="flex items-center justify-between border-b pb-4">
-                                <div class="flex items-center space-x-4">
-                                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-17%2022-21-30-sYvzSpDfN5LvqI8WM5o92pQmHIr6Hg.png" alt="Product" class="w-16 h-16 object-cover rounded">
-                                    <div>
-                                        <h3 class="font-semibold">Car Best Under Seat Cushion</h3>
-                                        <p class="text-sm text-gray-600">Order #BD12345 - June 15, 2023</p>
-                                    </div>
-                                </div>
-                                <span class="text-[#FF8C00] font-semibold">৳2250</span>
-                            </div>
-                            <div class="flex items-center justify-between border-b pb-4">
-                                <div class="flex items-center space-x-4">
-                                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-17%2022-21-30-sYvzSpDfN5LvqI8WM5o92pQmHIr6Hg.png" alt="Product" class="w-16 h-16 object-cover rounded">
-                                    <div>
-                                        <h3 class="font-semibold">Luxury Car Seat Belt Clips</h3>
-                                        <p class="text-sm text-gray-600">Order #BD12346 - June 10, 2023</p>
-                                    </div>
-                                </div>
-                                <span class="text-[#FF8C00] font-semibold">৳950</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-4">
-                                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20from%202025-02-17%2022-21-30-sYvzSpDfN5LvqI8WM5o92pQmHIr6Hg.png" alt="Product" class="w-16 h-16 object-cover rounded">
-                                    <div>
-                                        <h3 class="font-semibold">Toyota Car Ashtray Holder with LED</h3>
-                                        <p class="text-sm text-gray-600">Order #BD12347 - June 5, 2023</p>
-                                    </div>
-                                </div>
-                                <span class="text-[#FF8C00] font-semibold">৳950</span>
-                            </div>
+                            
+                            
+                            
                         </div>
-                        <a href="#" class="block text-center text-[#FF8C00] mt-4 hover:underline">View All Orders</a>
+                        <a href="/orders" class="block text-center text-[#FF8C00] mt-4 hover:underline">View All Orders</a>
                     </div>
 
                     <!-- Recent Reviews -->

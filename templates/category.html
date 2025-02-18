@@ -79,18 +79,14 @@
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <h2 class="text-lg font-semibold mb-4">Filter By Brand</h2>
                     <div class="space-y-3">
+
+                        {% for brand in all_brands %}
                         <label class="flex items-center">
-                            <input type="checkbox" name="brand" value="mi" onchange="handleBrandChange(this)">
-                            <span class="ml-2">MI</span>
+                            <input type="checkbox" name="brand" value="{{brand.id}}" onchange="handleBrandChange(this)">
+                            <span class="ml-2">{{brand.name}}</span>
                         </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" name="brand" value="toyota" onchange="handleBrandChange(this)">
-                            <span class="ml-2">Toyota</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" name="brand" value="trd" onchange="handleBrandChange(this)">
-                            <span class="ml-2">TRD</span>
-                        </label>
+                        {% endfor %}
+                        
                     </div>
                     <button onclick="filterProducts()" 
                         class="w-full bg-[#FF8C00] text-white py-2 rounded-lg hover:bg-[#FF8C00]/90 transition-colors mt-4">

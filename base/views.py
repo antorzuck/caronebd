@@ -38,21 +38,37 @@ def home(r):
     return render(r, 'home.html', context)
 
 
+from django.db.models import Count
+
 def product_view(r, slug):
     try:
         get_product = Product.objects.get(slug=slug)
-
-
         rvw = Review.objects.filter(product=get_product)
 
-        context = {
-            'product' : get_product,
-            'rvw' : rvw
-        }
-    except:
-        return redirect('/')
-    return render(r, 'product-view.html', context)
+        # Count total reviews
+        total_reviews = rvw.count()
 
+        # Get count of each rating
+        rating_counts = rvw.values('rating').annotate(count=Count('rating'))
+
+        # Calculate percentages (as whole numbers)
+        rating_percentages = {
+            item['rating']: (item['count'] * 100) // total_reviews  # Integer division
+            for item in rating_counts
+        } if total_reviews > 0 else {}
+
+        print(rating_percentages)  # Debugging output
+
+        context = {
+            'product': get_product,
+            'rvw': rvw,
+            'rating_percentages': rating_percentages
+        }
+    except Exception as e:
+        print(e)
+        return redirect('/')
+    
+    return render(r, 'product-view.html', context)
 
 
 
@@ -368,3 +384,19 @@ def sub_category_view(request, slug):
 
     
     return render(request, 'category.html', context)
+
+
+def profile(r):
+
+    if not r.user.is_authenticated:
+        messages.error(r, "You are not authenticated")
+        return redirect('/')
+    orders = Order.objects.filter(user=r.user).count()
+
+    rvws = Review.objects.filter(user=r.user).count()
+
+    context = {
+        'orders' : orders,
+        'rvws' : rvws
+    }
+    return render(r, 'profile.html', context)

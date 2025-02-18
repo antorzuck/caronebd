@@ -4,6 +4,13 @@
 {% block body %}
 
 
+{% if messages %}
+{% for m in messages %}
+<div class="p-4 mb-4 text-sm rounded-lg text-yellow-900 bg-yellow-100" role="alert">
+    <span class="font-medium"></span> {{ m }}
+</div>
+{% endfor %}
+{% endif }
 
     <section class="flex gap-5 justify-center">
     <!-- Hero Carousel -->

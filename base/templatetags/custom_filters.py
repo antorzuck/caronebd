@@ -14,6 +14,11 @@ def multiply(value, arg):
         return ''
 
 
+@register.filter
+def dict_get(dictionary, key):
+    """ Custom template filter to get a value from a dictionary """
+    return dictionary.get(int(key), 0)  # Convert key to int
+
 
 @register.filter
 def time_ago(value):

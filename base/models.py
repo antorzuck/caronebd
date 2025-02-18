@@ -248,12 +248,10 @@ class Review(models.Model):
         return f"Review for {self.product.name} by {self.user.username}"
 
     def save(self, *args, **kwargs):
-        # Update the product's rating and num_reviews when a review is saved
         super().save(*args, **kwargs)
         self.update_product_rating()
 
     def update_product_rating(self):
-        # Recalculate the average rating for the product
         product = self.product
         reviews = product.reviews.all()
         avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
@@ -262,3 +260,4 @@ class Review(models.Model):
         product.rating = avg_rating
         product.num_reviews = num_reviews
         product.save()
+
