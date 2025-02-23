@@ -1,0 +1,170 @@
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 2, in <module>
+    import sy
+ModuleNotFoundError: No module named 'sy'
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 2, in <module>
+    import sy
+ModuleNotFoundError: No module named 'sy'
+[UID:1092][199192] Child process with pid: 199202 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 2, in <module>
+    import sy
+ModuleNotFoundError: No module named 'sy'
+[UID:1092][199192] Child process with pid: 199205 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200063 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200066 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200111 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200114 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200119 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200121 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200130 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200131 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200155 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200157 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200168 was killed by signal: 15, core dumped: no
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/caronebd/passenger_wsgi.py", line 3, in <module>
+    from careonebd.wsgi import application
+ModuleNotFoundError: No module named 'careonebd'
+[UID:1092][200059] Child process with pid: 200169 was killed by signal: 15, core dumped: no
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 505, in parse
+    compile_func = self.tags[command]
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/rrwkwtlx/caronebd/base/views.py", line 38, in home
+    return render(r, 'home.html', context)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/defaulttags.py", line 953, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/rrwkwtlx/virtualenv/caronebd/3.9/lib/python3.9/site-packages/django/template/base.py", line 558, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 287: 'endblock', expected 'elif', 'else' or 'endif'. Did you forget to register or load this tag?
+Not Found: /favicon.ico
+Not Found: /static/pay.png
+Not Found: /static/quality.png
+Not Found: /static/delivery.png
+Not Found: /static/vendor/fontawesome-free/css/all.min.css
+Not Found: /static/vendor/adminlte/css/adminlte.min.css
+Not Found: /static/jazzmin/css/main.css
+Not Found: /static/admin/js/vendor/jquery/jquery.js
+Not Found: /static/vendor/adminlte/img/AdminLTELogo.png
+Not Found: /static/vendor/bootstrap/js/bootstrap.min.js
+Not Found: /static/vendor/adminlte/js/adminlte.min.js
+Not Found: /static/vendor/adminlte/img/AdminLTELogo.png
+{1: 33, 4: 33, 5: 33}
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+{1: 33, 4: 33, 5: 33}
+1
+Not Found: /favicon.ico
+1
+1
+1
+1
+1
+{1: 33, 4: 33, 5: 33}
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+{1: 33, 4: 33, 5: 33}
+{1: 33, 4: 33, 5: 33}
+{1: 33, 4: 33, 5: 33}
