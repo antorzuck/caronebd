@@ -6,6 +6,18 @@
 <section class="bg-gray-100" x-data="{ showForgotPassword: false }">
     <div class="min-h-screen flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-xl shadow-lg p-8">
+
+
+
+
+{% if messages %}
+{% for m in messages %}
+<div class="p-4 mb-4 text-sm rounded-lg text-yellow-900 bg-yellow-100" role="alert">
+    <span class="font-medium"></span> {{ m }}
+</div>
+{% endfor %}
+{% endif %}
+
             <!-- Logo and Title -->
             <div class="text-center mb-8">
                 <div class="w-20 h-20 bg-[#FF8C00]/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -67,7 +79,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     Don't have an account? 
-                    <a href="/signup" class="text-[#FF8C00] hover:underline">Sign up</a>
+                    <a href="/register" class="text-[#FF8C00] hover:underline">Sign up</a>
                 </p>
                 <button 
                     @click="showForgotPassword = true" 

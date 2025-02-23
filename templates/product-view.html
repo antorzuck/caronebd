@@ -106,11 +106,12 @@
 
 
                     {% if not request.user.is_authenticated %}
+                    <a>
                     <button 
      @click="showModal = true" 
     class="w-full bg-[#FF8C00] my-2 text-md text-black py-3 rounded-md hover:bg-[#FF8C00]/90 transition-colors flex items-center justify-center gap-2">
     <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-    Order in Cash On Delivery</button>
+    Order in Cash On Delivery</button></a>
 
     {% else %}
 

@@ -3,7 +3,7 @@ from base.models import *
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import login
+from django.contrib.auth import login, logout, authenticate
 from django.db.models import Q
 from urllib.parse import unquote
 
@@ -287,10 +287,12 @@ def register(request):
 
     
         login(request, user)
-        messages.success(request, "Registration successful and logged in automatically.")
+        messages.success(request, "Registration successfull.")
+        if not slug:
+            return redirect('/profile')
         return redirect(f'/product/{slug}')
 
-    return redirect('/')
+    return render(request, 'register.html')
 
 
 
@@ -308,10 +310,7 @@ def category_view(request, slug):
    
     products = Product.objects.filter(category__in=subcats, is_active=True)
 
-    print(products)
-    print(sort_by)
-    print(brands)
-
+ 
     if brands:
         brand_list = unquote(brands).split(',')
         products = products.filter(brand__in=brand_list)
@@ -389,14 +388,43 @@ def sub_category_view(request, slug):
 def profile(r):
 
     if not r.user.is_authenticated:
-        messages.error(r, "You are not authenticated")
-        return redirect('/')
+        return render(r, 'register.html')
     orders = Order.objects.filter(user=r.user).count()
 
-    rvws = Review.objects.filter(user=r.user).count()
+    rvs = Review.objects.filter(user=r.user).order_by('-id')
+
+    rvws = rvs.count()
 
     context = {
         'orders' : orders,
-        'rvws' : rvws
+        'rvws' : rvws,
+        'rvs' : rvs
     }
     return render(r, 'profile.html', context)
+
+
+
+def logged_out(request):
+    logout(request)
+    messages.error(request, "logged out.")
+    return redirect('/')
+
+def login_handle(request):
+    if request.method == 'POST':
+        username = request.POST.get('phone')
+        password = request.POST.get('password')
+
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('/profile')
+        else:
+            messages.error(request, "Credentials not valid.")
+            return render(request, 'login.html')
+
+        
+
+
+    return render(request, 'login.html')

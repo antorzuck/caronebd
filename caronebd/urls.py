@@ -22,5 +22,7 @@ urlpatterns = [
     path('category/<str:slug>', category_view),
     path('subcategory/<str:slug>', sub_category_view),
     path('profile', profile),
+    path('logout/', logged_out),
+    path('login', login_handle),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

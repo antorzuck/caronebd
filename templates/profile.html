@@ -1,6 +1,6 @@
 
 {% extends 'base.html' %}
-
+{% load static %}
 {% block css %}
         .profile-bg {
             background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
@@ -10,7 +10,7 @@
         }
 {% endblock %}
     
-</head>
+
 
 {% block body %}
     <div class="min-h-screen">
@@ -93,70 +93,39 @@
                     <div class="bg-white rounded-lg shadow p-6">
                         <h2 class="text-xl font-semibold mb-4">Recent Reviews</h2>
                         <div class="space-y-4">
-                            <div class="border-b pb-4">
-                                <div class="flex items-center mb-2">
-                                    <div class="flex text-yellow-400">
-                                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                        <i data-lucide="star" class="w-5 h-5"></i>
-                                    </div>
-                                    <span class="ml-2 text-sm text-gray-600">for Car Best Under Seat Cushion</span>
-                                </div>
-                                <p class="text-gray-600">Great product! Very comfortable and fits perfectly under my car seat.</p>
-                            </div>
+
+                            {% if rvs %}
+                           {% for rr in rvs %}
                             <div>
                                 <div class="flex items-center mb-2">
                                     <div class="flex text-yellow-400">
+                                        {{r.rating}}
                                         <i data-lucide="star" class="w-5 h-5 fill-current"></i>
                                         <i data-lucide="star" class="w-5 h-5 fill-current"></i>
                                         <i data-lucide="star" class="w-5 h-5 fill-current"></i>
                                         <i data-lucide="star" class="w-5 h-5 fill-current"></i>
                                         <i data-lucide="star" class="w-5 h-5 fill-current"></i>
                                     </div>
-                                    <span class="ml-2 text-sm text-gray-600">for Luxury Car Seat Belt Clips</span>
+                                    <span class="ml-2 text-sm text-gray-600">{{rr.product.name}}</span>
                                 </div>
-                                <p class="text-gray-600">Excellent quality and looks very stylish. Highly recommended!</p>
+                                <p class="text-gray-600">{{rr.text}}</p>
                             </div>
+
+                            {% endfor %}
+
+
                         </div>
                         <a href="#" class="block text-center text-[#FF8C00] mt-4 hover:underline">View All Reviews</a>
+                        {% else %}
+                        <div class="flex flex-col justify-center items-center">
+                        <img class="w-24" src="{% static 'rvws.png' %}" alt="np_reviews">
+                        <p>No reviews.</p>
+                    </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </main>
-
-        <!-- Footer -->
-        <footer class="bg-gray-800 text-white py-8">
-            <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-4">About Us</h3>
-                        <p class="text-sm text-gray-400">Car One BD is your trusted source for high-quality auto parts and accessories. We provide excellent service and competitive prices.</p>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-                        <ul class="space-y-2 text-sm text-gray-400">
-                            <li><a href="#" class="hover:text-white">Home</a></li>
-                            <li><a href="#" class="hover:text-white">Shop</a></li>
-                            <li><a href="#" class="hover:text-white">About</a></li>
-                            <li><a href="#" class="hover:text-white">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
-                        <ul class="space-y-2 text-sm text-gray-400">
-                            <li class="flex items-center"><i data-lucide="map-pin" class="w-4 h-4 mr-2"></i> 123 Auto Street, Dhaka, Bangladesh</li>
-                            <li class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-2"></i> +880 123 456 7890</li>
-                            <li class="flex items-center"><i data-lucide="mail" class="w-4 h-4 mr-2"></i> info@caronebd.com</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
-                    <p>&copy; 2023 Car One BD. All rights reserved.</p>
-                </div>
-            </div>
-        </footer>
     </div>
 
 {% endblock %}
