@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout, authenticate
 from django.db.models import Q
 from urllib.parse import unquote
-
+from collections import defaultdict
 
 
 def check_coupon(request):
@@ -25,7 +25,7 @@ def home(r):
 
     flash = FlushSell.objects.all().order_by('?')[:10]
 
-    products = Product.objects.filter(is_active=True).order_by('-id')[:15]
+    products = Product.objects.filter(is_active=True).order_by('?')[:15]
 
     brands = Brand.objects.all().order_by('?')[:15]
 
@@ -45,6 +45,11 @@ def product_view(r, slug):
         get_product = Product.objects.get(slug=slug)
         rvw = Review.objects.filter(product=get_product)
 
+
+        grouped_attributes = defaultdict(list)
+        for attribute in get_product.attributes.all():
+            grouped_attributes[attribute.attribute.name].append(attribute.value)
+
         # Count total reviews
         total_reviews = rvw.count()
 
@@ -62,7 +67,8 @@ def product_view(r, slug):
         context = {
             'product': get_product,
             'rvw': rvw,
-            'rating_percentages': rating_percentages
+            'rating_percentages': rating_percentages,
+             'grouped_attributes': dict(grouped_attributes)
         }
     except Exception as e:
         print(e)
@@ -79,9 +85,16 @@ def checkout(request):
         product = Product.objects.get(id=request.GET.get('product_id'))
         quantity = request.GET.get('quantity')
 
+        size = request.GET.get('size')
+        color = request.GET.get('color')
+        other = request.GET.get('other')
+
         context = {
             'product' : product,
-            'quantity' : quantity
+            'quantity' : quantity,
+            'size' : size,
+            'color' : color,
+            'other' : other
         }
         return render(request, 'checkout.html', context)
 
@@ -97,6 +110,13 @@ def checkout(request):
         discount_amount = float(request.POST.get("total_discount_amount", 0))
         shipping_cost = float(request.POST.get("total_shipping_to_pay", 0))
         total_price = float(request.POST.get("total_price_to_pay", 0))
+
+
+        quantity = request.POST.get('quantity')
+        size = request.POST.get('size')
+        color = request.POST.get('color')
+        other = request.POST.get('other')
+
 
         order = Order.objects.create(
             user=request.user,
@@ -115,11 +135,14 @@ def checkout(request):
             products = CartItems.objects.filter(cart=get_cart)
 
             for p in products:
-                OrderItem.objects.create(order=order, product=p.product, quantity=p.quantity)
+                OrderItem.objects.create(order=order, product=p.product, quantity=p.quantity, size=p.size,
+                color=p.color, others=p.other)
+            
+            get_cart.delete()
 
         if product_id:
             get_product = Product.objects.get(id=product_id)
-            oic = OrderItem.objects.create(order=order, product=get_product)
+            oic = OrderItem.objects.create(order=order, product=get_product, quantity=int(quantity), size=size, color=color, others=other)
 
         return redirect('/orders')
     return render(request, "checkout.html")
@@ -191,6 +214,10 @@ def cart(request):
 def add_to_cart(request):
     product_id = request.GET.get('product_id')
     quantity = request.GET.get('quantity', 1)
+
+    size = request.GET.get('size')
+    color = request.GET.get('color')
+    other = request.GET.get('other')
     
     if not product_id:
         return JsonResponse({'error': 'Product ID is required'}, status=400)
@@ -207,6 +234,9 @@ def add_to_cart(request):
     
     cart_item, item_created = CartItems.objects.get_or_create(cart=cart, product=product)
     cart_item.quantity += int(quantity)
+    cart_item.size = size
+    cart_item.color = color
+    cart_item.other = other
     cart_item.save()
     
     return redirect('/cart')

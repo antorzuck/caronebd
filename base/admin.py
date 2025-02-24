@@ -10,6 +10,10 @@ admin.site.register(OrderItem)
 admin.site.register(Cart)
 admin.site.register(CartItems)
 admin.site.register(Review)
+
+
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'full_name', 'phone_number', 'shipping_method', 'total_price')
@@ -51,6 +55,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('category', 'is_active', 'created_at')
     date_hierarchy = 'created_at'
     inlines = [ThumbnailInline]
+    filter_horizontal = ('attributes',)
 
 @admin.register(SiteInfo)
 class SiteInfoAdmin(admin.ModelAdmin):
@@ -58,3 +63,14 @@ class SiteInfoAdmin(admin.ModelAdmin):
     search_fields = ('site_name', 'contact_email')
     readonly_fields = ('created_at', 'updated_at')
 
+
+
+class AttributeValueInline(admin.TabularInline):
+    model = AttributeValue
+    extra = 1
+
+class AttributeAdmin(admin.ModelAdmin):
+    inlines = [AttributeValueInline]
+
+
+admin.site.register(Attribute, AttributeAdmin)

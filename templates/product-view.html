@@ -64,6 +64,35 @@
                 </div>
             </div>
 
+
+            <div class="my-2">
+               
+                <div class="mt-6">
+            
+                    <div class="mt-4">
+                        {% for attr_name, values in grouped_attributes.items %}
+                            <div class="mb-4">
+                                <p class="font-medium">{{ attr_name }}:</p>
+                                <div class="flex gap-2">
+                                    {% for value in values %}
+                                        <div class="attribute-box px-4 py-2 border border-gray-400 rounded-md cursor-pointer hover:bg-primary hover:border-none hover:text-white"
+                                            data-attribute="{{ attr_name }}" 
+                                            data-value="{{ value }}">
+                                            {{ value }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            
+                <input type="hidden" id="selectedAttributes" name="selectedAttributes">
+            </div>
+            
+
+
+
             <!-- Quantity -->
             <div>
                 <label class="block text-sm font-medium mb-2">Quantity</label>
@@ -448,37 +477,43 @@
         </div>
     </div>
 </div>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const quantityInput = document.getElementById("quantity");
         const increaseBtn = document.getElementById("increase");
         const decreaseBtn = document.getElementById("decrease");
         const checkoutBtn = document.getElementById("checkout-btn");
-
         const cartBtn = document.getElementById("cart-btn");
 
-        function updateCheckoutHref() {
+        let selectedAttributes = {}; // Store selected attributes
+
+        function updateURLs() {
             let quantity = parseInt(quantityInput.value);
-            checkoutBtn.href = `/checkout?product_id={{ product.id }}&quantity=` + quantity;
+            let queryParams = new URLSearchParams({
+                product_id: "{{ product.id }}",
+                quantity: quantity
+            });
+
+            // Add selected attributes
+            for (const [key, value] of Object.entries(selectedAttributes)) {
+                queryParams.append(key, value);
+            }
+
+            // Update hrefs dynamically
+            checkoutBtn.href = `/checkout?${queryParams.toString()}`;
+            cartBtn.href = `/add-to-cart?${queryParams.toString()}`;
         }
 
-        function updateCartHref() {
-            let quantity = parseInt(quantityInput.value);
-            cartBtn.href = `/add-to-cart?product_id={{ product.id }}&quantity=` + quantity;
-        }
-
+        // Handle Quantity Change
         increaseBtn.addEventListener("click", function () {
             quantityInput.value = parseInt(quantityInput.value) + 1;
-            updateCheckoutHref();
-            updateCartHref();
+            updateURLs();
         });
 
         decreaseBtn.addEventListener("click", function () {
             if (parseInt(quantityInput.value) > 1) {
                 quantityInput.value = parseInt(quantityInput.value) - 1;
-                updateCheckoutHref();
-                updateCartHref();
+                updateURLs();
             }
         });
 
@@ -486,9 +521,35 @@
             if (parseInt(quantityInput.value) < 1 || isNaN(quantityInput.value)) {
                 quantityInput.value = 1;
             }
-            updateCheckoutHref();
-            updateCartHref();
+            updateURLs();
         });
+
+        // Handle Attribute Selection
+        document.querySelectorAll(".attribute-box").forEach(box => {
+            box.addEventListener("click", function () {
+                let attribute = this.getAttribute("data-attribute");
+                let value = this.getAttribute("data-value");
+
+                // Deselect previous selection of the same attribute
+                document.querySelectorAll(`.attribute-box[data-attribute='${attribute}']`).forEach(el => {
+                    el.classList.remove("bg-gray-300", "border-blue-500", "bg-primary", "border-none", "text-white");
+                });
+
+                // Mark selected
+                this.classList.add("bg-primary", "border-none", "text-white");
+
+                // Store selected value
+                selectedAttributes[attribute] = value;
+
+                // Update hidden input field
+                document.getElementById("selectedAttributes").value = JSON.stringify(selectedAttributes);
+
+                console.log(selectedAttributes); // Debugging: Check selected values
+                updateURLs(); // ✅ Update URLs when attributes are selected
+            });
+        });
+
+        updateURLs(); // ✅ Ensure URLs are updated on page load
     });
 </script>
 

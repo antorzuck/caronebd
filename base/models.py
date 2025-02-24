@@ -12,6 +12,23 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True 
 
+
+class Attribute(models.Model):
+    name = models.CharField(max_length=100)  # Name of the attribute like "Size", "Color", etc.
+
+    def __str__(self):
+        return self.name
+
+class AttributeValue(models.Model):
+    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)  # Link the value to an attribute
+    value = models.CharField(max_length=100)  # The actual value of the attribute like "Small", "Medium", "Red"
+
+    def __str__(self):
+        return f"{self.attribute.name}: {self.value}"
+
+
+
+
 class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -86,6 +103,8 @@ class Product(BaseModel):
     is_active = models.BooleanField(default=True)
     rating = models.FloatField(default=0.0)
     num_reviews = models.PositiveIntegerField(default=0)
+
+    attributes = models.ManyToManyField(AttributeValue, related_name="products", blank=True)
 
     featured_image = models.FileField(upload_to='product')
 
@@ -199,6 +218,10 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
 
+    size = models.CharField(max_length=50, null=True, blank=True)
+    color = models.CharField(max_length=50, null=True, blank=True)
+    others = models.TextField(null=True, blank=True)
+
     def save(self, *args, **kwargs):
         self.subtotal = self.product.discount_price * self.quantity
         super().save(*args, **kwargs)
@@ -223,6 +246,10 @@ class CartItems(BaseModel):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=0)
+
+    size = models.CharField(max_length=50, null=True, blank=True)
+    color = models.CharField(max_length=50, null=True, blank=True)
+    other = models.TextField(null=True, blank=True)
     
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
@@ -260,4 +287,6 @@ class Review(models.Model):
         product.rating = avg_rating
         product.num_reviews = num_reviews
         product.save()
+
+
 

@@ -1,120 +1,86 @@
-{% extends 'base.html' %}
-
-
-{% block body %}
-
-<section class="bg-gray-100" x-data="{ showForgotPassword: false }">
-    <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-xl shadow-lg p-8">
-            <!-- Logo and Title -->
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 bg-[#FF8C00]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="steering-wheel" class="w-12 h-12 text-[#FF8C00]"></i>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.4/dayjs.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7fc;
+        }
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="h-screen flex justify-center items-center">
+    <div class="w-full max-w-2xl p-4">
+        <div class="card">
+            <h2 class="text-xl font-semibold mb-4">Kalker Profit vs Ajker Profit</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 bg-gray-50 rounded-md text-center">
+                    <p class="text-gray-500">Kalker Profit</p>
+                    <p id="previousProfit" class="text-lg font-bold text-green-500">Loading...</p>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900">Car One BD</h2>
-                <p class="mt-2 text-gray-600">Please enter your details to log in.</p>
-            </div>
-
-            <!-- Form -->
-            <form method="POST" action="/login" class="space-y-6">
-                {% csrf_token %}
-                
-                <!-- Phone Input -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Phone Number <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i data-lucide="phone" class="w-5 h-5 text-gray-400"></i>
-                        </div>
-                        <input 
-                            name="phone"
-                            type="tel"
-                            required
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8C00] focus:border-transparent"
-                            placeholder="Enter your phone number">
-                    </div>
+                <div class="p-4 bg-gray-50 rounded-md text-center">
+                    <p class="text-gray-500">Ajker Profit</p>
+                    <p id="currentProfit" class="text-lg font-bold text-green-500">Loading...</p>
                 </div>
-
-                <!-- Password Input -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Password <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i data-lucide="lock" class="w-5 h-5 text-gray-400"></i>
-                        </div>
-                        <input 
-                            name="password"
-                            type="password"
-                            required
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8C00] focus:border-transparent"
-                            placeholder="Enter your password">
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <button
-                    type="submit"
-                    class="w-full bg-[#FF8C00] text-white py-2 rounded-lg hover:bg-[#FF8C00]/90 transition-colors">
-                    Log In
-                </button>
-            </form>
-
-            <!-- Sign Up and Forgot Password Links -->
-            <div class="mt-6 text-center">
-                <p class="text-sm text-gray-600">
-                    Don't have an account? 
-                    <a href="/signup" class="text-[#FF8C00] hover:underline">Sign up</a>
-                </p>
-                <button 
-                    @click="showForgotPassword = true" 
-                    class="text-sm text-[#FF8C00] hover:underline mt-2">
-                    Forgot password?
-                </button>
             </div>
         </div>
+
     </div>
 
-    <!-- Forgot Password Popup -->
-    <div 
-        x-show="showForgotPassword" 
-        x-cloak
-        class="fixed inset-0 z-50 overflow-y-auto"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0">
-        
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/50"></div>
+    <script>
+        // Getting today's date formatted for API call
+        const today = dayjs().format("YYYY-MM-DD");
+        const dateFrom = `${today} 00:00:00`;
+        const dateTo = `${today} 23:59:59`;
 
-        <!-- Popup Content -->
-        <div class="relative min-h-screen flex items-center justify-center p-4">
-            <div 
-                @click.away="showForgotPassword = false"
-                class="relative bg-white w-full max-w-sm rounded-xl shadow-lg p-6 text-center"
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 scale-90"
-                x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-90">
+        // The API URL and headers
+        const url = "https://api.octoclick.com/api/v4/statistic/dashboard";
+        const headers = {
+            "Content-Type": "application/json",
+            "Authorization": "ApiToken 8344e567c08c2cc2dffaf7ce93d35fa10d92bf98c917100041ea564798b6a6a8be9ae7ec26afd062caa5a8860a77d3743d677133666439ac8c3a5c9657779dd9"
+        };
 
-                <i data-lucide="glass-water" class="w-16 h-16 text-[#FF8C00] mx-auto mb-4"></i>
-                <h3 class="text-xl font-bold mb-2">Oops! Forgot your password?</h3>
-                <p class="text-gray-600 mb-4">Please drink some water and try to remember your password. Hydration is key to memory!</p>
-                <button 
-                    @click="showForgotPassword = false"
-                    class="bg-[#FF8C00] text-white px-4 py-2 rounded-lg hover:bg-[#FF8C00]/90 transition-colors">
-                    I'll try to remember
-                </button>
-            </div>
-        </div>
-    </div>
-</section>
-{% endblock %}
+        // Payload for the API request
+        const payload = {
+            "date_from": dateFrom,
+            "date_to": dateTo,
+            "datetime_range": "day",
+            "user_role": "webmaster"
+        };
+
+        // Function to fetch and update the UI with data
+        async function fetchData() {
+            try {
+                const response = await axios.post(url, payload, { headers });
+                const data = response.data.data[0].metrics;
+             
+
+                const previousProfit = data.WebmasterProfit.data[0].previous;
+                const currentProfit = data.WebmasterProfit.data[0].current;
+
+                // Update the UI with fetched data
+                document.getElementById("previousProfit").textContent = `$${previousProfit}`;
+                document.getElementById("currentProfit").textContent = `$${currentProfit}`;
+       
+
+            } catch (error) {
+                console.error("Error fetching data", error);
+                alert("Failed to fetch data. Please try again later.");
+            }
+        }
+
+        // Call the function to fetch data on page load
+        fetchData();
+    </script>
+</body>
+</html>
