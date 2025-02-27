@@ -24,5 +24,8 @@ urlpatterns = [
     path('profile', profile),
     path('logout/', logged_out),
     path('login', login_handle),
+    path('orders-manage/', order_list, name="order_list"),
+    path('orders/<int:order_id>/', order_detail, name="order_detail"),
+    path('update-order/<int:order_id>/', update_order_status, name="update_order_status"),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

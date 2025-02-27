@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db.models import Q
 from urllib.parse import unquote
 from collections import defaultdict
-
+from django.core.paginator import Paginator
 
 def check_coupon(request):
     code = request.GET.get('code', '').strip().lower()
@@ -458,3 +458,55 @@ def login_handle(request):
 
 
     return render(request, 'login.html')
+
+
+
+
+
+
+def order_list(request):
+
+    if not request.user.is_staff:
+        messages.error(request, "Only admin can view this page.")
+        return redirect('/')
+    status_filter = request.GET.get('status', 'all')
+    
+    if status_filter == "all":
+        orders = Order.objects.all().order_by('-id')
+    else:
+        orders = Order.objects.filter(order_status=status_filter).order_by('-id')
+
+    
+    paginator = Paginator(orders, 10)  
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "orders": page_obj,
+        "status_filter": status_filter,
+    }
+    return render(request, "orders/order_list.html", context)
+
+
+def order_detail(request, order_id):
+    if not request.user.is_staff:
+        messages.error(request, "Only admin can view this page.")
+        return redirect('/')
+    order = get_object_or_404(Order, id=order_id)
+    context = {"order": order}
+    return render(request, "orders/order_detail.html", context)
+
+
+def update_order_status(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    
+    if request.method == "POST":
+
+        if not request.user.is_staff:
+            messages.error(request, "Only admin can view this page.")
+            return redirect('/')
+        new_status = request.POST.get("order_status")
+        order.order_status = new_status
+        order.save()
+        messages.success(request, "Order status updated successfully!")
+        return redirect(f'/orders/{order_id}')
