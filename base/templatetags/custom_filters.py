@@ -59,3 +59,17 @@ def discount_percentage(original_price, discount_price):
         return round(discount, 2)  # Round to 2 decimal places
     except ZeroDivisionError:
         return 0  # In case the original price is zero
+
+
+
+
+@register.filter
+def get_attribute_data(product_attributes_data, attr_name):
+    return [data for data in product_attributes_data if data["attribute_name"] == attr_name]
+
+@register.filter
+def get_value_data(attribute_data, value):
+    for data in attribute_data:
+        if data["attribute_value"] == value:
+            return data
+    return None

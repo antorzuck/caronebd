@@ -290,3 +290,16 @@ class Review(models.Model):
 
 
 
+class ProductAttribute(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_attributes")
+    attribute_value = models.ForeignKey(AttributeValue, on_delete=models.CASCADE, related_name="product_values")
+    stock = models.PositiveIntegerField(default=0)
+    regular_price = models.DecimalField(max_digits=10, decimal_places=2)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    image = models.ImageField(upload_to="product_attributes/", null=True, blank=True)
+
+    class Meta:
+        unique_together = ("product", "attribute_value")  # Ensures unique attributes per product
+
+    def __str__(self):
+        return f"{self.product.name} - {self.attribute_value.value}"

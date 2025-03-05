@@ -79,7 +79,6 @@ def product_view(r, slug):
 
 
 
-
 def checkout(request):
     if request.method == 'GET':
         product = Product.objects.get(id=request.GET.get('product_id'))
@@ -510,3 +509,29 @@ def update_order_status(request, order_id):
         order.save()
         messages.success(request, "Order status updated successfully!")
         return redirect(f'/orders/{order_id}')
+
+
+
+def get_attributes(request):
+    id = request.GET.get('id')
+    product = request.GET.get('product')
+
+    attrval = AttributeValue.objects.get(value=id)
+    product = Product.objects.get(id=product)
+
+    try:
+        xxx = ProductAttribute.objects.get(
+        product = product,
+        attribute_value = attrval)
+    except Exception as e:
+        return JsonResponse({"have_price": False})
+
+    if xxx.sale_price > 0:
+        return JsonResponse({
+            "have_price": True,
+            "price": xxx.sale_price,
+            "image": xxx.image.url
+            
+            })
+    else:
+        return JsonResponse({"have_price": False, "price": xxx.price})
