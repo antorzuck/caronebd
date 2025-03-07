@@ -8,6 +8,14 @@ from django.db.models import Q
 from urllib.parse import unquote
 from collections import defaultdict
 from django.core.paginator import Paginator
+from django.core.files.base import ContentFile
+from django.utils.text import slugify
+import base64
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+
+
 
 def check_coupon(request):
     code = request.GET.get('code', '').strip().lower()
@@ -535,3 +543,64 @@ def get_attributes(request):
             })
     else:
         return JsonResponse({"have_price": False, "price": xxx.price})
+
+
+
+def create_pro(r):
+    return render(r, 'createpro.html')
+
+
+@api_view(['POST'])
+def create_product(request):
+    data = request.data
+    print("shit called")
+    print(data)
+    try:
+        # Fetching category and brand
+        category = SubCategory.objects.get(name=data['category'])
+        brand = Brand.objects.get(name=data['brand'])
+
+        # Creating the Product
+        product = Product.objects.create(
+            name=data['title'],
+            slug=slugify(data['slug']),
+            description=data['description'],
+            price=0,  # Price will be managed via attributes
+            category=category,
+            brand=brand,
+            is_active=True,
+            featured_image=save_base64_image(data['main_image'], 'product_main')
+        )
+        
+        # Saving Gallery Images
+        for index, img in enumerate(data.get('gallery_images', [])):
+            Thumbnail.objects.create(
+                product=product,
+                image=save_base64_image(img, f'product_thumbnail_{index}')
+            )
+        
+        # Saving Variations (Attributes like capacity and color)
+        for attr in data.get('variation_attributes', []):
+            attr_type, attr_value = attr.split(':')
+            attribute_value, _ = AttributeValue.objects.get_or_create(attribute__name=attr_type, value=attr_value)
+            
+            ProductAttribute.objects.create(
+                product=product,
+                attribute_value=attribute_value,
+                stock=data[f'variation_stock_{attr_type.lower()}_{attr_value.lower()}'],
+                regular_price=data[f'variation_regular_price_{attr_type.lower()}_{attr_value.lower()}'],
+                sale_price=data.get(f'variation_sale_price_{attr_type.lower()}_{attr_value.lower()}'),
+                image=request.FILES.get(f'variation_image_{attr_type.lower()}_{attr_value.lower()}')
+            )
+        
+        return Response({"message": "Product created successfully!", "product_id": product.id})
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+
+
+def save_base64_image(data, filename):
+    if data.startswith('data:image'):
+        format, imgstr = data.split(';base64,')
+        ext = format.split('/')[-1]
+        return ContentFile(base64.b64decode(imgstr), name=f'{filename}.{ext}')
+    return None

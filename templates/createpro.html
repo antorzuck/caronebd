@@ -1441,7 +1441,7 @@
             console.log('Form Data:', formDataObj);
             
             // Send data to server
-            fetch('/create', {
+            fetch('/create-product', {
                 method: 'POST',
                 body: formData
             })
@@ -1467,12 +1467,8 @@
         });
 
         // Initialize with sample data for demo
-        window.addEventListener('load', function() {
-            // Add sample gallery images
-            for (let i = 0; i < 3; i++) {
-                addGalleryItem('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Messenger_creation_F65111FC-BD2D-4803-8BC6-BA2E17C039A0-VYuruTLnIAEMBr6GKVjTCXYdPrI7we.jpeg', 'sample-image.jpg');
-            }
-        });
+
     </script>
 </body>
 </html>
+

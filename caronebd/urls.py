@@ -26,6 +26,8 @@ urlpatterns = [
     path('login', login_handle),
     path('get-attributes/', get_attributes),
     path('orders-manage/', order_list, name="order_list"),
+    path('create-product/', create_product),
+    path('create-pro', create_pro),
     path('orders/<int:order_id>/', order_detail, name="order_detail"),
     path('update-order/<int:order_id>/', update_order_status, name="update_order_status"),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
