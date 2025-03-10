@@ -554,7 +554,7 @@ def create_product(request):
     data = request.data
     try:
         # Debug: Print the data being received
-        print("Received Data:", data)
+     
 
         # Fetching category and brand
         category = SubCategory.objects.get(name=data['category'])
@@ -565,7 +565,9 @@ def create_product(request):
             name=data['title'],
             slug=slugify(data['slug']),
             description=data['description'],
-            price=0,  # Price will be managed via attributes
+            price=data['regular_price'],
+            discount_price=data['sale_price'],
+            stock = data['stock_qty'],
             category=category,
             brand=brand,
             is_active=True,
