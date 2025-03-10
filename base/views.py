@@ -13,7 +13,7 @@ from django.utils.text import slugify
 import base64
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from decimal import Decimal
 
 
 
@@ -549,13 +549,13 @@ def get_attributes(request):
 def create_pro(r):
     return render(r, 'createpro.html')
 
-
 @api_view(['POST'])
 def create_product(request):
     data = request.data
-    print("shit called")
-    print(data)
     try:
+        # Debug: Print the data being received
+        print("Received Data:", data)
+
         # Fetching category and brand
         category = SubCategory.objects.get(name=data['category'])
         brand = Brand.objects.get(name=data['brand'])
@@ -571,31 +571,62 @@ def create_product(request):
             is_active=True,
             featured_image=save_base64_image(data['main_image'], 'product_main')
         )
-        
-        # Saving Gallery Images
-        for index, img in enumerate(data.get('gallery_images', [])):
+
+        # Save gallery images
+        gallery_images = data.getlist('gallery_images[]')
+        for index, img in enumerate(gallery_images):
+            print(f"Saving Gallery Image {index}: {img}")
             Thumbnail.objects.create(
                 product=product,
                 image=save_base64_image(img, f'product_thumbnail_{index}')
             )
-        
+
         # Saving Variations (Attributes like capacity and color)
-        for attr in data.get('variation_attributes', []):
-            attr_type, attr_value = attr.split(':')
-            attribute_value, _ = AttributeValue.objects.get_or_create(attribute__name=attr_type, value=attr_value)
-            
-            ProductAttribute.objects.create(
-                product=product,
-                attribute_value=attribute_value,
-                stock=data[f'variation_stock_{attr_type.lower()}_{attr_value.lower()}'],
-                regular_price=data[f'variation_regular_price_{attr_type.lower()}_{attr_value.lower()}'],
-                sale_price=data.get(f'variation_sale_price_{attr_type.lower()}_{attr_value.lower()}'),
-                image=request.FILES.get(f'variation_image_{attr_type.lower()}_{attr_value.lower()}')
-            )
-        
+        variation_attributes = data.getlist('variation_attributes[]')
+        for attr in variation_attributes:
+            try:
+                # Ensure the attribute is in the 'attribute:value' format
+                if ':' not in attr:
+                    raise ValueError(f"Invalid format for variation attribute: {attr}")
+
+                attr_type, attr_value = attr.split(':')
+
+                print(f"Processing attribute: {attr_type} - {attr_value}")
+
+                # Fetch or create the attribute value
+                attribute = Attribute.objects.get(name=attr_type)
+                attribute_value, created = AttributeValue.objects.get_or_create(attribute=attribute, value=attr_value)
+
+                # Add attribute value to product
+                product.attributes.add(attribute_value)
+
+                # Create the product attribute (with stock, prices, and image)
+                stock = int(data.get(f'variation_stock_{attr_type.lower()}_{attr_value.lower()}', 0))
+                regular_price = Decimal(data.get(f'variation_regular_price_{attr_type.lower()}_{attr_value.lower()}', 0))
+                sale_price = Decimal(data.get(f'variation_sale_price_{attr_type.lower()}_{attr_value.lower()}', 0))
+                image = request.FILES.get(f'variation_image_{attr_type.lower()}_{attr_value.lower()}')
+
+                print(f"Stock: {stock}, Regular Price: {regular_price}, Sale Price: {sale_price}, Image: {image}")
+
+                # Create the product attribute (with stock, prices, and image)
+                ProductAttribute.objects.create(
+                    product=product,
+                    attribute_value=attribute_value,
+                    stock=stock,
+                    regular_price=regular_price,
+                    sale_price=sale_price if sale_price else None,
+                    image=image
+                )
+
+            except Exception as e:
+                print(f"Error processing attribute {attr}: {e}")
+
         return Response({"message": "Product created successfully!", "product_id": product.id})
+
     except Exception as e:
+        print("Error in creating product:", e)
         return Response({"error": str(e)}, status=400)
+
 
 
 def save_base64_image(data, filename):
@@ -604,3 +635,32 @@ def save_base64_image(data, filename):
         ext = format.split('/')[-1]
         return ContentFile(base64.b64decode(imgstr), name=f'{filename}.{ext}')
     return None
+
+
+
+def fetch_categories(request):
+    if request.method == 'GET':
+        categories = SubCategory.objects.values('name')
+        category_list = list(categories)
+        return JsonResponse(category_list, safe=False)
+
+def fetch_brand(request):
+    if request.method == 'GET':
+        brands = Brand.objects.values('name')  
+        brand_list = list(brands)
+        return JsonResponse(brand_list, safe=False)
+
+def fetch_attributes(request):
+    if request.method == 'GET':
+        attributes = Attribute.objects.all()
+        attribute_list = []
+        
+        for attribute in attributes:
+            values = list(AttributeValue.objects.filter(attribute=attribute).values_list('value', flat=True))
+            attribute_list.append({
+                'value': attribute.name,  
+                'name': attribute.name,
+                'values': values
+            })
+        
+        return JsonResponse(attribute_list, safe=False)

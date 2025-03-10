@@ -732,7 +732,7 @@
         // Fetch categories
         async function fetchCategories() {
             try {
-                const response = await fetch('/category-fetch/');
+                const response = await fetch('/category');
                 if (!response.ok) {
                     throw new Error('Failed to fetch categories');
                 }
@@ -740,7 +740,7 @@
                 
                 // Populate category dropdowns
                 const categoryOptions = categories.map(category => 
-                    `<option value="${category.name}">${category.name}</option>`
+                    `<option value="${category.value}">${category.name}</option>`
                 ).join('');
                 
                 initialCategory.innerHTML = '<option value="">Select Category</option>' + categoryOptions;
@@ -748,7 +748,10 @@
                 console.error('Error fetching categories:', error);
                 // Fallback data if fetch fails
                 const fallbackCategories = [
-                    { value: 'errors', name: 'Something wrong. contact to developer.' }
+                    { value: 'electronics', name: 'Electronics & Gadgets' },
+                    { value: 'accessories', name: 'Other Gadgets Accessories' },
+                    { value: 'phones', name: 'Phones & Tablets' },
+                    { value: 'computers', name: 'Computers & Laptops' }
                 ];
                 
                 const categoryOptions = fallbackCategories.map(category => 
@@ -762,7 +765,7 @@
         // Fetch brands
         async function fetchBrands() {
             try {
-                const response = await fetch('/brand-fetch');
+                const response = await fetch('/brand');
                 if (!response.ok) {
                     throw new Error('Failed to fetch brands');
                 }
@@ -770,7 +773,7 @@
                 
                 // Populate brand dropdowns
                 const brandOptions = brands.map(brand => 
-                    `<option value="${brand.name}">${brand.name}</option>`
+                    `<option value="${brand.value}">${brand.name}</option>`
                 ).join('');
                 
                 initialBrand.innerHTML = '<option value="">Select Brand</option>' + brandOptions;
@@ -779,7 +782,10 @@
                 console.error('Error fetching brands:', error);
                 // Fallback data if fetch fails
                 const fallbackBrands = [
-                    { value: 'error', name: 'Error loading brands' }
+                    { value: 'apple', name: 'Apple' },
+                    { value: 'samsung', name: 'Samsung' },
+                    { value: 'sony', name: 'Sony' },
+                    { value: 'generic', name: 'Generic' }
                 ];
                 
                 const brandOptions = fallbackBrands.map(brand => 
@@ -1430,16 +1436,13 @@
                     formDataObj[key] = value;
                 }
             });
-             
+            
             // Log form data
             console.log('Form Data:', formDataObj);
             
             // Send data to server
-            fetch('/create-product/', {
+            fetch('/create-product', {
                 method: 'POST',
-                headers: {
-        'X-CSRFToken': getCookie('csrftoken')  // Include CSRF token
-    },
                 body: formData
             })
             .then(response => {
@@ -1464,22 +1467,6 @@
         });
 
         // Initialize with sample data for demo
-
-        function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.startsWith(name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
 
     </script>
 </body>
