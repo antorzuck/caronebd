@@ -486,22 +486,28 @@
 
         let selectedAttributes = {}; // Store selected attributes
 
-        function updateURLs() {
-            let quantity = parseInt(quantityInput.value);
-            let queryParams = new URLSearchParams({
-                product_id: "{{ product.id }}",
-                quantity: quantity
-            });
+       function updateURLs() {
+    let quantity = parseInt(quantityInput.value);
+    let queryParams = new URLSearchParams({
+        product_id: "{{ product.id }}",
+        quantity: quantity
+    });
 
-            // Add selected attributes
-            for (const [key, value] of Object.entries(selectedAttributes)) {
-                queryParams.append(key, value);
-            }
+    // Add selected attributes
+    for (const [key, value] of Object.entries(selectedAttributes)) {
+        queryParams.append(key, value);
+    }
 
-            // Update hrefs dynamically
-            checkoutBtn.href = `/checkout?${queryParams.toString()}`;
-            cartBtn.href = `/add-to-cart?${queryParams.toString()}`;
-        }
+    // Ensure the buttons exist before updating their `href`
+    if (checkoutBtn) {
+        checkoutBtn.href = `/checkout?${queryParams.toString()}`;
+    }
+    
+    if (cartBtn) {
+        cartBtn.href = `/add-to-cart?${queryParams.toString()}`;
+    }
+}
+
 
         // Handle Quantity Change
         increaseBtn.addEventListener("click", function () {
