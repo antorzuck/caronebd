@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Product</title>
+{% extends 'dashboard.html' %}
+
+
+    {% block head %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
     <style>
         * {
             margin: 0;
@@ -19,13 +19,7 @@
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 15px;
-            width: 100%;
-        }
-
+   
         @media (max-width: 768px) {
             .container {
                 padding: 0 10px;
@@ -455,10 +449,16 @@
             }
         }
     </style>
-</head>
-<body>
+
+    {% endblock %}
+
+
+
+
+{% block body %}
     <div class="container">
         <!-- Initial Create Product Form -->
+         
         <div class="card" id="initial-form">
             <h2>Create Product</h2>
             <form id="create-product-form">
@@ -1516,6 +1516,7 @@
 
 
     </script>
-</body>
-</html>
+
+
+{% endblock %}
 

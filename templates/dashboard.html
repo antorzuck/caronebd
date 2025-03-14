@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OrenMart - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    {% block head %}
+    {% endblock %}
     <style>
         * {
             margin: 0;
@@ -294,7 +297,7 @@
             
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="/">
+                    <a href="/create-pro">
                     <i class="fas fa-chart-line"></i>
                     <span>Create Product</span>
                 </a>
@@ -304,9 +307,9 @@
                 <li class="nav-item active">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Order</span>
-                    <i class="fas fa-chevron-up arrow"></i>
+                    <i class="fas fa-chevron-down arrow"></i>
                 </li>
-                <ul class="submenu open">
+                <ul class="submenu">
                     <li class="submenu-item">
                         <i class="fas fa-plus"></i>
                         <span>Create Order</span>
