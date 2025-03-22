@@ -2,7 +2,7 @@ from django import template
 from django.utils.timezone import now
 import datetime
 
-
+from decimal import Decimal, InvalidOperation
 
 register = template.Library()
 
@@ -50,19 +50,21 @@ def time_ago(value):
         return f"{years} year{'s' if years > 1 else ''} ago"
 
 
-
 @register.filter
 def discount_percentage(original_price, discount_price):
     try:
-        # Calculate the discount percentage
+        # Ensure values are Decimal
+        original_price = Decimal(original_price)
+        discount_price = Decimal(discount_price)
+
+        # Prevent division by zero and invalid operations
+        if original_price <= 0 or discount_price < 0:
+            return 0
+
         discount = ((original_price - discount_price) / original_price) * 100
-        return round(discount, 2)  # Round to 2 decimal places
-    except ZeroDivisionError:
-        return 0  # In case the original price is zero
-
-
-
-
+        return round(discount, 2)
+    except (InvalidOperation, TypeError, ValueError, ZeroDivisionError):
+        return 0  # Return 0 if there's any issue
 @register.filter
 def get_attribute_data(product_attributes_data, attr_name):
     return [data for data in product_attributes_data if data["attribute_name"] == attr_name]

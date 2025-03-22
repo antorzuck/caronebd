@@ -26,7 +26,7 @@
             <!-- Main Image -->
             <div class="bg-white rounded-lg p-4 overflow-hidden zoom-hover">
                 <div class="relative aspect-square">
-                    <img :src="'{{product.featured_image.url}}'" 
+                    <img :src="'{{ product.featured_image.url }}'" 
                          alt="Product Image" 
                          id="productImage" 
                          class="w-full h-full object-contain transition-transform duration-300">
@@ -35,10 +35,10 @@
             <!-- Thumbnail Images -->
             <div class="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
                 {% for i in product.thumbnails.all %}
-                <button class="flex-none w-20 h-20 rounded-lg bg-white p-2 border-2 border-primary">
+                <button class="flex-none w-20 h-20 rounded-lg bg-white p-2 border-2 border-primary" onclick="changeFeaturedImage('{{ i.image.url }}')">
                     <img src="{{i.image.url}}" alt="Thumbnail {{forloop.counter}}" class="w-full h-full object-contain">
                 </button>
-                {% endfor %}
+            {% endfor %}
             </div>
         </div>
 
@@ -47,7 +47,10 @@
             <div>
                 <h1 class="text-2xl font-bold mb-2">{{product.name}}</h1>
                 <div class="flex items-center gap-4 mb-4">
-                    <span id="pricepay" class="text-3xl font-bold text-primary">৳{{product.discount_price}}</span>
+                    <div>
+                    <span class="text-3xl font-bold text-primary">৳</span>
+                    <span id="pricepay" class="text-3xl font-bold text-primary">{{product.discount_price}}</span>
+                </div>
                     <span class="text-lg text-gray-500 line-through">৳{{product.price}}</span>
                     <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-sm font-medium">{{ product.price|discount_percentage:product.discount_price }}% OFF</span>
                 </div>
@@ -490,7 +493,8 @@
     let quantity = parseInt(quantityInput.value);
     let queryParams = new URLSearchParams({
         product_id: "{{ product.id }}",
-        quantity: quantity
+        quantity: quantity,
+        hm_price: document.getElementById('pricepay').textContent.trim()
     });
 
     // Add selected attributes
@@ -558,8 +562,10 @@
                 .then(data => {
 
                     if(data.have_price){
-                        document.getElementById('pricepay').textContent = `৳${data.price}`;
+                        document.getElementById('pricepay').textContent = `${data.price}`;
+                    
                         document.getElementById('productImage').src = data.image;
+                        updateURLs(); 
                     } else{
                         console.log("nope")
                     }
@@ -574,6 +580,13 @@
 
         updateURLs(); 
     });
+
+
+
+    function changeFeaturedImage(imageUrl) {
+    // Update the src of the featured image
+    document.getElementById('productImage').src = imageUrl;
+}
 </script>
 
 {% endblock %}

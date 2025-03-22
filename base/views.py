@@ -225,6 +225,8 @@ def add_to_cart(request):
     size = request.GET.get('size')
     color = request.GET.get('color')
     other = request.GET.get('other')
+
+    price = request.GET.get('hm_price')
     
     if not product_id:
         return JsonResponse({'error': 'Product ID is required'}, status=400)
@@ -242,6 +244,7 @@ def add_to_cart(request):
     cart_item, item_created = CartItems.objects.get_or_create(cart=cart, product=product)
     cart_item.quantity += int(quantity)
     cart_item.size = size
+    cart_item.price = price
     cart_item.color = color
     cart_item.other = other
     cart_item.save()
@@ -374,6 +377,98 @@ def category_view(request, slug):
 
     
     return render(request, 'category.html', context)
+
+
+
+
+
+def brand_view(request, slug):
+  
+    the_brand = get_object_or_404(Brand, slug=slug)
+
+    sort_by = request.GET.get('sort', '-id')
+    brands = request.GET.get('brands')
+    price = request.GET.get('price')
+
+   
+    products = Product.objects.filter(brand=the_brand, is_active=True)
+
+ 
+    if brands:
+        brand_list = unquote(brands).split(',')
+        products = products.filter(brand__in=brand_list)
+
+    if price:
+        products = products.filter(price__lte=price)
+
+   
+    if sort_by == '-id':
+        products = products.order_by('-id')
+
+    if sort_by == 'price-low':
+        products = products.order_by('discount_price')
+    
+    if sort_by == 'price-high':
+        products = products.order_by('-discount_price')
+
+
+    
+    context = {
+        'products' : products,
+        'category' : the_brand
+    }
+
+    
+    return render(request, 'category.html', context)
+
+
+
+
+def search_view(request):
+
+    q = request.GET.get('q')
+  
+    sort_by = request.GET.get('sort', '-id')
+    brands = request.GET.get('brands')
+    price = request.GET.get('price')
+
+   
+    products = Product.objects.filter(name__icontains=q, is_active=True)
+
+ 
+    if brands:
+        brand_list = unquote(brands).split(',')
+        products = products.filter(brand__in=brand_list)
+
+    if price:
+        products = products.filter(price__lte=price)
+
+   
+    if sort_by == '-id':
+        products = products.order_by('-id')
+
+    if sort_by == 'price-low':
+        products = products.order_by('discount_price')
+    
+    if sort_by == 'price-high':
+        products = products.order_by('-discount_price')
+
+
+    
+    context = {
+        'products' : products,
+        'q' : q
+    }
+
+    
+    return render(request, 'category.html', context)
+
+
+
+
+
+
+
 
 
 
@@ -529,21 +624,20 @@ def get_attributes(request):
 
     try:
         xxx = ProductAttribute.objects.get(
-        product = product,
-        attribute_value = attrval)
-    except Exception as e:
+            product=product,
+            attribute_value=attrval
+        )
+    except ProductAttribute.DoesNotExist:
         return JsonResponse({"have_price": False})
 
-    if xxx.sale_price > 0:
+    if xxx.sale_price is not None and xxx.sale_price > 0:
         return JsonResponse({
             "have_price": True,
             "price": xxx.sale_price,
             "image": xxx.image.url
-            
-            })
+        })
     else:
-        return JsonResponse({"have_price": False, "price": xxx.price})
-
+        return JsonResponse({"have_price": False, "price": "0"})
 
 
 def create_pro(r):

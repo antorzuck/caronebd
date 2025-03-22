@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.models import User
 from django.db.models import Avg
+from decimal import Decimal
 
 
 class BaseModel(models.Model):
@@ -246,19 +247,23 @@ class CartItems(BaseModel):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=0)
-
     size = models.CharField(max_length=50, null=True, blank=True)
     color = models.CharField(max_length=50, null=True, blank=True)
     other = models.TextField(null=True, blank=True)
+
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
 
 
     def total_price(self):
-        if self.product:
-            return self.quantity * self.product.discount_price
-        return 0
+
+        print(f"Product: {self.product}, Quantity: {self.quantity}, Price: {self.price}")
+    
+        quantity = Decimal(self.quantity or 0)
+        price = Decimal(self.price or 0)
+        return quantity * price
 
 
 

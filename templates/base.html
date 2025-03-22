@@ -89,32 +89,48 @@
                     {% endif %}
                 </a>
                 <div class="flex items-center space-x-4">
+                    <a href="#" id="search-toggle">
                     <button class="text-white">
-                        <i data-lucide="heart" class="w-6 h-6"></i>
+                        <i data-lucide="search" class="w-6 h-6"></i>
                     </button>
+                    </a>
                     <a href="/cart" class="relative">
                     <button class="text-white">
 
-        {% if cart_count > 0 %}
-        <span class="absolute top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
-            {{ cart_count }}
-        </span>
-    {% endif %}
+                    {% if cart_count > 0 %}
+                    <span class="absolute top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
+                        {{ cart_count }}
+                    </span>
+                    {% endif %}
                         <i data-lucide="shopping-cart" class="w-6 h-6"></i>
                     </button>
-                </a>
+                    </a>
 
-                <a href="/profile">
-                    <button class="text-white">
-                        <i data-lucide="user" class="w-6 h-6"></i>
-                    </button>
-                </a>
+                    <a href="/profile">
+                        <button class="text-white">
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
     </header>
 
- 
+     <!-- Sliding Search Input (Added) -->
+     <div id="search-overlay" class="fixed inset-0 bg-black bg-opacity-80 z-[100] transform transition-transform duration-300 translate-x-full">
+        <div class="flex items-center justify-center h-full px-4">
+            <div class="w-full max-w-2xl bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="relative">
+                    <form action="/search">
+                    <input name="q" type="text" placeholder="Search..." class="w-full py-4 px-6 text-gray-800 focus:outline-none text-lg">
+                    <button id="search-close" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -466,6 +482,36 @@
             });
         });
 
+
+        const searchToggle = document.getElementById('search-toggle');
+        const searchOverlay = document.getElementById('search-overlay');
+        const searchClose = document.getElementById('search-close');
+        const searchInput = searchOverlay.querySelector('input');
+        
+        // Toggle search overlay
+        searchToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            searchOverlay.classList.remove('translate-x-full');
+            setTimeout(() => {
+                searchInput.focus();
+            }, 300);
+        });
+        
+        // Close search overlay
+        searchClose.addEventListener('click', function() {
+            searchOverlay.classList.add('translate-x-full');
+        });
+        
+        // Close search when clicking outside the search box
+        searchOverlay.addEventListener('click', function(e) {
+            if (e.target === searchOverlay) {
+                searchOverlay.classList.add('translate-x-full');
+            }
+        });
+        
+        // Close search on escape key
+   
+  
 
 
         lucide.createIcons();
