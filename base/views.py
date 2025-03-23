@@ -14,7 +14,7 @@ import base64
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from decimal import Decimal
-
+from django.db.models import Count
 
 
 def check_coupon(request):
@@ -46,7 +46,7 @@ def home(r):
     return render(r, 'home.html', context)
 
 
-from django.db.models import Count
+
 
 def product_view(r, slug):
     try:
@@ -70,13 +70,26 @@ def product_view(r, slug):
             for item in rating_counts
         } if total_reviews > 0 else {}
 
-        print(rating_percentages)  # Debugging output
+        list_of_price = []
+        if get_product.discount_price == 0:
+            pa = ProductAttribute.objects.filter(product=get_product)
+
+            f_obj = pa.first()
+            l_obj = pa.last()
+
+            if f_obj:
+                list_of_price.append(f_obj.sale_price)
+
+            if l_obj:
+                list_of_price.append(l_obj.sale_price)
+
 
         context = {
             'product': get_product,
             'rvw': rvw,
             'rating_percentages': rating_percentages,
-             'grouped_attributes': dict(grouped_attributes)
+            'grouped_attributes': dict(grouped_attributes),
+            'alter_price' : "-".join(str(int(value)) for value in list_of_price)
         }
     except Exception as e:
         print(e)
@@ -219,12 +232,17 @@ def cart(request):
 
 
 def add_to_cart(request):
+
+    params = request.GET
+    param_string = "\n".join([f"{key}={','.join(value)}" for key, value in params.lists()])
+
+   
     product_id = request.GET.get('product_id')
     quantity = request.GET.get('quantity', 1)
 
     size = request.GET.get('size')
     color = request.GET.get('color')
-    other = request.GET.get('other')
+    other = param_string
 
     price = request.GET.get('hm_price')
     

@@ -42,6 +42,22 @@
             </div>
         </div>
 
+
+<div id="attribute-modal" class="fixed inset-0 flex items-center justify-center bg-black/50 hidden">
+    <div class="bg-white rounded-lg p-6 shadow-lg text-center max-w-sm">
+        <i data-lucide="alert-triangle" class="w-12 h-12 text-red-500 mx-auto"></i>
+        <h2 class="text-xl font-semibold mt-2">Please select an attribute</h2>
+        <p class="text-gray-600 mt-1">Choose a size, color, or an existing option before proceeding.</p>
+        <button id="close-modal" class="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">OK</button>
+    </div>
+</div>
+
+
+
+
+
+
+
         <!-- Product Info -->
         <div class="space-y-6">
             <div>
@@ -49,7 +65,12 @@
                 <div class="flex items-center gap-4 mb-4">
                     <div>
                     <span class="text-3xl font-bold text-primary">৳</span>
+                    {% if product.discount_price > 0 %}
                     <span id="pricepay" class="text-3xl font-bold text-primary">{{product.discount_price}}</span>
+                    {% else %}
+                    <span id="pricepay" class="alter_pricepay text-3xl font-bold text-primary">{{alter_price}}</span>
+                    {% endif %}
+
                 </div>
                     <span class="text-lg text-gray-500 line-through">৳{{product.price}}</span>
                     <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-sm font-medium">{{ product.price|discount_percentage:product.discount_price }}% OFF</span>
@@ -566,6 +587,12 @@
                     
                         document.getElementById('productImage').src = data.image;
                         updateURLs(); 
+
+                        const elementWithClass = document.querySelector(".alter_pricepay");
+                        if (elementWithClass) {
+                        
+                            elementWithClass.classList.remove("alter_pricepay");
+                        }
                     } else{
                         console.log("nope")
                     }
@@ -587,6 +614,33 @@
     // Update the src of the featured image
     document.getElementById('productImage').src = imageUrl;
 }
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+        const cartBtn = document.getElementById("cart-btn");
+        const checkoutBtn = document.getElementById("checkout-btn");
+        const modal = document.getElementById("attribute-modal");
+        const closeModal = document.getElementById("close-modal");
+
+        function checkPrice(event) {
+            const priceSpan = document.querySelector(".alter_pricepay"); // Re-check dynamically
+            if (priceSpan) { 
+                event.preventDefault(); // Prevent navigation
+                modal.classList.remove("hidden"); // Show modal
+            }
+        }
+        
+        cartBtn.addEventListener("click", checkPrice);
+        checkoutBtn.addEventListener("click", checkPrice);
+        
+        closeModal.addEventListener("click", function () {
+            modal.classList.add("hidden"); // Hide modal
+        });
+    });
+
+
+
 </script>
 
 {% endblock %}
