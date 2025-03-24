@@ -191,7 +191,7 @@
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 font-medium text-gray-900">#{{ order.id }}</td>
                             <td class="px-6 py-4 text-gray-700">{{ order.full_name }}</td>
-                            <td class="px-6 py-4 font-medium text-gray-900">${{ order.total_price }}</td>
+                            <td class="px-6 py-4 font-medium text-gray-900">৳{{ order.total_price }}</td>
                             <td class="px-6 py-4">
                                 {% if order.order_status == 'pending' %}
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">

@@ -250,7 +250,6 @@ class CartItems(BaseModel):
     size = models.CharField(max_length=50, null=True, blank=True)
     color = models.CharField(max_length=50, null=True, blank=True)
     other = models.TextField(null=True, blank=True)
-
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     
     def __str__(self):

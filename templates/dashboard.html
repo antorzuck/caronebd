@@ -3,372 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OrenMart - Dashboard</title>
+    <title>CaroneBD - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f15a22',
+                    }
+                }
+            }
+        }
+    </script>
 
     {% block head %}
     {% endblock %}
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-        
-        /* Sidebar Styles */
-        .sidebar {
-            width: 220px;
-            background-color: white;
-            border-right: 1px solid #e0e0e0;
-            padding: 20px 0;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .logo {
-            padding: 0 20px 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo img {
-            width: 40px;
-            height: 40px;
-        }
-        
-        .logo-text {
-            font-size: 24px;
-            font-weight: bold;
-            margin-left: 10px;
-            color: #f15a22;
-        }
-        
-        .nav-menu {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .nav-item {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            color: #555;
-            position: relative;
-        }
-        
-        .nav-item:hover {
-            background-color: #f8f8f8;
-        }
-        
-        .nav-item.active {
-            background-color: #f8f8f8;
-            color: #f15a22;
-            border-left: 3px solid #f15a22;
-        }
-
-        a{
-            text-decoration: none;
-            color: #f15a22;
-        }
-        
-        .nav-item i {
-            width: 20px;
-            margin-right: 10px;
-        }
-        
-        .nav-item .arrow {
-            position: absolute;
-            right: 20px;
-        }
-        
-        .submenu {
-            list-style: none;
-            padding-left: 30px;
-            display: none;
-        }
-        
-        .submenu.open {
-            display: block;
-        }
-        
-        .submenu-item {
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            color: #555;
-        }
-        
-        .submenu-item:hover {
-            color: #f15a22;
-        }
-        
-        .submenu-item i {
-            width: 20px;
-            margin-right: 10px;
-            font-size: 14px;
-        }
-        
-        /* Main Content Styles */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* Header Styles */
-        .header {
-            background-color: #f15a22;
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .page-title {
-            font-size: 18px;
-            font-weight: 500;
-        }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-        }
-        
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            background-color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #f15a22;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        .user-info {
-            text-align: right;
-        }
-        
-        .user-name {
-            font-weight: 500;
-        }
-        
-        .user-phone {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-        
-        /* Content Area Styles */
-        .content {
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-        }
-        
-        .content-left {
-            flex: 2;
-        }
-        
-        .content-right {
-            flex: 1;
-        }
-        
-        .card {
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        
-        .card-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-            font-weight: 500;
-            font-size: 16px;
-        }
-        
-        .card-body {
-            padding: 20px;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .card-body.illustration {
-            height: 300px;
-            background-color: #f9f9f9;
-        }
-        
-        .btn {
-            padding: 8px 16px;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .btn-primary {
-            background-color: #f15a22;
-            color: white;
-        }
-        
-        .btn-outline {
-            background-color: white;
-            border: 1px solid #ddd;
-            color: #555;
-        }
-        
-        .upload-area {
-            border: 2px dashed #ddd;
-            border-radius: 5px;
-            padding: 30px;
-            text-align: center;
-            color: #999;
-        }
-        
-        .upload-icon {
-            font-size: 40px;
-            margin-bottom: 15px;
-        }
-        
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-        
-        .form-label.required::after {
-            content: "*";
-            color: #f15a22;
-            margin-left: 4px;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        
-        .form-select {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            background-color: white;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
+<body class="bg-gray-100 text-gray-800 font-sans">
+    <div class="flex flex-col min-h-screen md:flex-row">
+        <!-- Sidebar Overlay -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" id="sidebarOverlay"></div>
+        
         <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo">
-                <div style="width: 40px; height: 40px; background-color: #f15a22; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-car-side" style="color: white; font-size: 20px;"></i>
+        <div class="w-56 bg-white border-r border-gray-200 flex flex-col h-screen fixed md:static -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50" id="sidebar">
+            <div class="px-5 pb-5 pt-4 flex items-center">
+                <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                    <i class="fas fa-car-side text-white text-lg"></i>
                 </div>
-                <div class="logo-text">CaroneBD</div>
+                <div class="ml-2.5 text-2xl font-bold text-primary">CaroneBD</div>
             </div>
             
             <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="/create-pro">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Create Product</span>
-                </a>
+                <li class="py-3 px-5 flex items-center cursor-pointer text-gray-600 hover:bg-gray-50 hover:text-primary">
+                    <a href="/create-pro" class="flex items-center w-full">
+                        <i class="fas fa-chart-line w-5 mr-2.5"></i>
+                        <span>Create Product</span>
+                    </a>
+                </li>
+
+                <li class="py-3 px-5 flex items-center cursor-pointer text-gray-600 hover:bg-gray-50 hover:text-primary">
+                    <a href="/orders-manage" class="flex items-center w-full">
+                        <i class="fas fa-chart-line w-5 mr-2.5"></i>
+                        <span>Manage Order</span>
+                    </a>
                 </li>
                
                 
-                <li class="nav-item active">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Order</span>
-                    <i class="fas fa-chevron-down arrow"></i>
-                </li>
-                <ul class="submenu">
-                    <li class="submenu-item">
-                        <i class="fas fa-plus"></i>
-                        <span>Create Order</span>
-                    </li>
-
-      
-                </ul>
-       
             </ul>
         </div>
         
         <!-- Main Content -->
-        <div class="main-content">
+        <div class="flex-1 flex flex-col">
             <!-- Header -->
-            <div class="header">
-                <div class="page-title">Manage Product</div>
-                <div class="user-profile">
-                    <div class="user-avatar">a</div>
-                    <div class="user-info">
-                        <div class="user-name"></div>
-                        <div class="user-phone">admin</div>
+            <div class="bg-primary text-white py-3.5 px-5 flex justify-between items-center">
+                <button class="bg-transparent border-0 text-white text-2xl cursor-pointer block md:hidden" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="text-lg font-medium">Manage Product</div>
+                <div class="flex items-center hidden md:flex">
+                    <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center text-primary font-bold mr-2.5">a</div>
+                    <div class="text-right">
+                        <div class="font-medium"></div>
+                        <div class="text-xs opacity-90">admin</div>
                     </div>
                 </div>
             </div>
             
             <!-- Content Area -->
-            <div class="content">
+            <div class="p-5 md:flex md:gap-5 flex-col md:flex-row">
                 {% block body %}
-
                 {% endblock %}
             </div>
         </div>
     </div>
 
     <script>
-        // Simple toggle functionality for demonstration
-        document.querySelectorAll('.nav-item').forEach(item => {
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        
+        menuToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        });
+        
+        sidebarOverlay.addEventListener('click', function() {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        });
+        
+        // Submenu toggle functionality
+        document.querySelectorAll('.nav-menu > li').forEach(item => {
             item.addEventListener('click', function() {
                 const hasSubmenu = this.nextElementSibling && this.nextElementSibling.classList.contains('submenu');
                 
                 if (hasSubmenu) {
-                    this.nextElementSibling.classList.toggle('open');
-                    const arrow = this.querySelector('.arrow');
+                    this.nextElementSibling.classList.toggle('hidden');
+                    const arrow = this.querySelector('.fa-chevron-down, .fa-chevron-up');
                     if (arrow) {
-                        if (this.nextElementSibling.classList.contains('open')) {
-                            arrow.classList.replace('fa-chevron-down', 'fa-chevron-up');
-                        } else {
+                        if (this.nextElementSibling.classList.contains('hidden')) {
                             arrow.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                        } else {
+                            arrow.classList.replace('fa-chevron-down', 'fa-chevron-up');
                         }
                     }
                 }
                 
                 // Toggle active class
-                document.querySelectorAll('.nav-item').forEach(navItem => {
-                    navItem.classList.remove('active');
+                document.querySelectorAll('.nav-menu > li').forEach(navItem => {
+                    navItem.classList.remove('active', 'bg-gray-50', 'text-primary', 'border-l-3', 'border-primary');
                 });
-                this.classList.add('active');
+                this.classList.add('active', 'bg-gray-50', 'text-primary', 'border-l-3', 'border-primary');
             });
         });
+        
+        // Close sidebar on mobile when clicking a menu item
+        document.querySelectorAll('.nav-menu > li a, .submenu > li').forEach(item => {
+            item.addEventListener('click', function() {
+                if (window.innerWidth < 768) {
+                    sidebar.classList.add('-translate-x-full');
+                    sidebarOverlay.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            }
+        });
+
+        // Initialize submenu state
+        const orderNavItem = document.getElementById('orderNavItem');
+        if (orderNavItem && orderNavItem.classList.contains('active')) {
+            const submenu = orderNavItem.nextElementSibling;
+            if (submenu) {
+                submenu.classList.remove('hidden');
+                const arrow = orderNavItem.querySelector('.fa-chevron-down');
+                if (arrow) {
+                    arrow.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                }
+            }
+        }
     </script>
 </body>
 </html>

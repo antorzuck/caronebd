@@ -105,9 +105,15 @@ def checkout(request):
         product = Product.objects.get(id=request.GET.get('product_id'))
         quantity = request.GET.get('quantity')
 
+        params = request.GET
+        param_string = "\n".join([
+            f"{key}={','.join(value)}"
+            for key, value in params.lists()
+            if not (key.startswith("product_id") or key.startswith("hm_price") or key.startswith("quantity"))])
+
         size = request.GET.get('size')
         color = request.GET.get('color')
-        other = request.GET.get('other')
+        other = param_string
 
         context = {
             'product' : product,
@@ -120,6 +126,7 @@ def checkout(request):
 
 
     if request.method == "POST":
+ 
         full_name = request.POST.get("full_name")
         phone_number = request.POST.get("phone_number")
         email = request.POST.get("email", "")
@@ -127,7 +134,10 @@ def checkout(request):
         shipping_method = request.POST.get("shipping_method")
         product_id = request.POST.get("product_id")
         cart_id = request.POST.get("cart_id")
-        discount_amount = float(request.POST.get("total_discount_amount", 0))
+        try:
+            discount_amount = float(request.POST.get("total_discount_amount", 0))
+        except:
+            discount_amount = 0
         shipping_cost = float(request.POST.get("total_shipping_to_pay", 0))
         total_price = float(request.POST.get("total_price_to_pay", 0))
 
@@ -234,9 +244,11 @@ def cart(request):
 def add_to_cart(request):
 
     params = request.GET
-    param_string = "\n".join([f"{key}={','.join(value)}" for key, value in params.lists()])
+    param_string = "\n".join([
+    f"{key}={','.join(value)}"
+    for key, value in params.lists()
+    if not (key.startswith("product_id") or key.startswith("hm_price") or key.startswith("quantity"))])
 
-   
     product_id = request.GET.get('product_id')
     quantity = request.GET.get('quantity', 1)
 
@@ -666,7 +678,6 @@ def create_pro(r):
 def create_product(request):
     data = request.data
 
-    print(data.keys())  # Debugging incoming data
 
     try:
         # Fetching category and brand

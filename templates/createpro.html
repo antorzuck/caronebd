@@ -2,7 +2,9 @@
 
 
     {% block head %}
+  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
 
     <style>
@@ -458,6 +460,12 @@
 {% block body %}
     <div class="container">
         <!-- Initial Create Product Form -->
+
+        <div id="loading-spinner" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+        </div>
+        
+        <div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg"></div>
          
         <div class="card" id="initial-form">
             <h2>Create Product</h2>
@@ -1466,40 +1474,47 @@
             });
              
             // Log form data
-            console.log('Form Data:', formDataObj);
+            document.getElementById('loading-spinner').classList.remove('hidden');
             
-            // Send data to server
             fetch('/create-product/', {
-                method: 'POST',
-                headers: {
-        'X-CSRFToken': getCookie('csrftoken')  // Include CSRF token
-    },
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Network response was not ok.');
-            })
-            .then(data => {
-                console.log('Success:', data);
-                alert('Product created successfully!');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error creating the product. Please try again.');
-            });
-        });
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')  // Include CSRF token
+        },
+        body: formData
+    })
+    .then(response => {
+        document.getElementById('loading-spinner').classList.add('hidden'); // Hide spinner
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        showToast('Product created successfully!', 'success');
+        setTimeout(() => location.reload(), 2000); // Reload after 2 sec
+    })
+    .catch(error => {
+        showToast(error, 'error');
+    });
+});
 
-        // Save product button click
-        document.getElementById('save-product-btn').addEventListener('click', function() {
-            alert('Product saved successfully!');
-        });
+// Function to show toast message
+function showToast(message, type) {
+    let toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `fixed bottom-5 right-5 px-4 py-2 rounded shadow-lg text-white ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    }`;
+    toast.classList.remove('hidden');
 
+    setTimeout(() => {
+        toast.classList.add('hidden');
+    }, 3000);
+}
         // Initialize with sample data for demo
 
-        function getCookie(name) {
+function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
