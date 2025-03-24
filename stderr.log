@@ -1242,3 +1242,319 @@ Not Found: /site/wp-includes/wlwmanifest.xml
 Not Found: /cms/wp-includes/wlwmanifest.xml
 Not Found: /sito/wp-includes/wlwmanifest.xml
 4
+Not Found: /favicon.ico
+Not Found: /robots.txt
+Product matching query does not exist.
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /archivarix.cms.php
+Not Found: /.well-known/security.txt
+Not Found: /security.txt
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /sitemap.txt
+Not Found: /sitemap.xml
+[UID:1092][2589170] Child process with pid: 2589178 was killed by signal: 15, core dumped: no
+Not Found: /favicon.ico
+Not Found: /atom.xml
+Not Found: /sitemap_index.xml
+Not Found: /robots.txt
+Not Found: /atom.xml
+Bad Request: /create-product/
+Bad Request: /create-product/
+Bad Request: /create-product/
+Bad Request: /create-product/
+<QuerySet []>
+-id
+None
+Not Found: /sitemap_index.xml
+Not Found: /sitemap.txt
+Not Found: /sitemap.xml.gz
+Not Found: /sitemaps.xml
+Not Found: /sitemap.xml.gz
+dict_keys(['title', 'slug', 'category', 'brand', 'status', 'stock_qty', 'regular_price', 'sale_price', 'variation_attributes[]', 'variation_stock_Color_black', 'variation_regular_price_Color_black', 'variation_sale_price_Color_black', 'variation_purchase_price_Color_black', 'variation_stock_Color_blue', 'variation_regular_price_Color_blue', 'variation_sale_price_Color_blue', 'variation_purchase_price_Color_blue', 'variation_stock_Color_red', 'variation_regular_price_Color_red', 'variation_sale_price_Color_red', 'variation_purchase_price_Color_red', 'seo_title', 'seo_description', 'description', 'gallery_images[]', 'main_image', 'variation_image_Color_black', 'variation_image_Color_blue', 'variation_image_Color_red'])
+Error in creating product: Brand matching query does not exist.
+dict_keys(['title', 'slug', 'category', 'brand', 'status', 'stock_qty', 'regular_price', 'sale_price', 'variation_attributes[]', 'variation_stock_Color_black', 'variation_regular_price_Color_black', 'variation_sale_price_Color_black', 'variation_purchase_price_Color_black', 'variation_stock_Color_blue', 'variation_regular_price_Color_blue', 'variation_sale_price_Color_blue', 'variation_purchase_price_Color_blue', 'variation_stock_Color_red', 'variation_regular_price_Color_red', 'variation_sale_price_Color_red', 'variation_purchase_price_Color_red', 'seo_title', 'seo_description', 'description', 'gallery_images[]', 'main_image', 'variation_image_Color_black', 'variation_image_Color_blue', 'variation_image_Color_red'])
+Error in creating product: Brand matching query does not exist.
+dict_keys(['title', 'slug', 'category', 'brand', 'status', 'stock_qty', 'regular_price', 'sale_price', 'variation_attributes[]', 'variation_stock_Color_black', 'variation_regular_price_Color_black', 'variation_sale_price_Color_black', 'variation_purchase_price_Color_black', 'variation_stock_Color_blue', 'variation_regular_price_Color_blue', 'variation_sale_price_Color_blue', 'variation_purchase_price_Color_blue', 'variation_stock_Color_red', 'variation_regular_price_Color_red', 'variation_sale_price_Color_red', 'variation_purchase_price_Color_red', 'seo_title', 'seo_description', 'description', 'gallery_images[]', 'main_image', 'variation_image_Color_black', 'variation_image_Color_blue', 'variation_image_Color_red'])
+Error in creating product: Brand matching query does not exist.
+dict_keys(['title', 'slug', 'category', 'brand', 'status', 'stock_qty', 'regular_price', 'sale_price', 'variation_attributes[]', 'variation_stock_Color_black', 'variation_regular_price_Color_black', 'variation_sale_price_Color_black', 'variation_purchase_price_Color_black', 'variation_stock_Color_blue', 'variation_regular_price_Color_blue', 'variation_sale_price_Color_blue', 'variation_purchase_price_Color_blue', 'variation_stock_Color_red', 'variation_regular_price_Color_red', 'variation_sale_price_Color_red', 'variation_purchase_price_Color_red', 'seo_title', 'seo_description', 'description', 'gallery_images[]', 'main_image', 'variation_image_Color_black', 'variation_image_Color_blue', 'variation_image_Color_red'])
+Error in creating product: Brand matching query does not exist.
+Not Found: /sitemaps.xml
+Not Found: /sitemap.xml
+<QuerySet []>
+-id
+None
+<QuerySet [<Product: Pugan 15A 60W Car Charger High-Quality & Fast Charging Support>]>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /wp-admin/setup-config.php
+Not Found: /wordpress/wp-admin/setup-config.php
+Not Found: /wp-admin/setup-config.php
+Not Found: /wordpress/wp-admin/setup-config.php
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /robots.txt
+Product matching query does not exist.
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /.well-known/security.txt
+Not Found: /security.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet [<Product: dgdfg dgdfgddfgdfg>]>
+-id
+None
+Product matching query does not exist.
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet [<Product: gsdf gsdfg sdfg>]>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet [<Product: Liqui moly molygen New Generation>]>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Product matching query does not exist.
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet [<Product: Powerful YueMi P5 LED Projector Fog Lamp - Ultra-Bright Visibility in Any Weather>, <Product: Car LED Projector Fog Lamp YueMi P5  -  Powerful  Ultra-Bright Visibility in Any Weather>]>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+<QuerySet []>
+-id
+None
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /robots.txt
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+<QuerySet []>
+-id
+None
+Not Found: /wp-admin/setup-config.php
+Not Found: /wordpress/wp-admin/setup-config.php
+Not Found: /wp-admin/setup-config.php
+Not Found: /wordpress/wp-admin/setup-config.php
+Not Found: /favicon.ico
