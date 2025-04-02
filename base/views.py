@@ -682,7 +682,10 @@ def create_product(request):
     try:
         # Fetching category and brand
         category = SubCategory.objects.get(name=data['category'])
-        brand = Brand.objects.get(name=data['brand'])
+        try:
+            brand = Brand.objects.get(name=data['brand'])
+        except:
+            brand = None
 
         # Creating the Product
         product = Product.objects.create(
