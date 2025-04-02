@@ -71,17 +71,29 @@ def product_view(r, slug):
         } if total_reviews > 0 else {}
 
         list_of_price = []
-        if get_product.discount_price == 0:
-            pa = ProductAttribute.objects.filter(product=get_product)
+        if get_product.discount_price == 0 or get_product.discount_price == None:
+            pa = filtered_attributes = ProductAttribute.objects.filter(
+    product=get_product)
+
+            print(pa)
 
             f_obj = pa.first()
             l_obj = pa.last()
 
             if f_obj:
-                list_of_price.append(f_obj.sale_price)
+                if not f_obj.sale_price == None:
+                    list_of_price.append(f_obj.sale_price)
+                else:
+                    list_of_price.append(f_obj.regular_price)
 
             if l_obj:
-                list_of_price.append(l_obj.sale_price)
+                if not l_obj.sale_price == None:
+                    list_of_price.append(l_obj.sale_price)
+                else:
+                    list_of_price.append(l_obj.regular_price)
+            
+        print(list_of_price)
+        print("MSKI CHUUT THR LIST OF PRICEEEE")
 
 
         context = {
@@ -89,8 +101,9 @@ def product_view(r, slug):
             'rvw': rvw,
             'rating_percentages': rating_percentages,
             'grouped_attributes': dict(grouped_attributes),
-            'alter_price' : "-".join(str(int(value)) for value in list_of_price)
+            'alter_price' : "-".join(str(int(value)) for value in list_of_price if value is not None)
         }
+        
     except Exception as e:
         print(e)
         return redirect('/')
@@ -664,6 +677,12 @@ def get_attributes(request):
         return JsonResponse({
             "have_price": True,
             "price": xxx.sale_price,
+            "image": xxx.image.url
+        })
+    elif xxx.regular_price is not None and xxx.regular_price > 0:
+        return JsonResponse({
+            "have_price": True,
+            "price": xxx.regular_price,
             "image": xxx.image.url
         })
     else:
